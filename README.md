@@ -457,10 +457,10 @@ Khi chạy lần đầu, hệ thống tự động tạo các tài khoản mẫu
 | Username | Password | Role | Email |
 |---|---|---|---|
 | `admin` | `password` | ROLE_ADMIN | admin@kidsfashion.com |
-| `john` | `password` | ROLE_CUSTOMER | john@example.com |
-| `jane` | `password` | ROLE_CUSTOMER | jane@example.com |
-| `bob` | `password` | ROLE_CUSTOMER | bob@example.com |
-
+| `john` | `password` hoặc `12345678' | ROLE_CUSTOMER | john@example.com |
+| `jane` | `password` hoặc `12345678' | ROLE_CUSTOMER | jane@example.com |
+| `bob` | `password` hoặc `12345678' | ROLE_CUSTOMER | bob@example.com |
+> Nếu muốn có thể vào tài khoản admin, để chỉnh lại tài khoản user.
 > **Bảo mật:** Mật khẩu được mã hóa bằng **BCrypt** trước khi lưu vào database.
 
 ---
