@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout :: layout(view='admin-reviews')}">
+<head>
+    <title>Quản lý đánh giá</title>
+</head>
+<body>
+<th:block th:fragment="content">
+    <h1>Quản lý đánh giá</h1>
+
+    <!-- Filter by status -->
+    <div class="mb-3">
+        <a th:href="@{/admin/reviews}" class="btn btn-sm" th:classappend="${selectedStatus == null} ? 'btn-primary' : 'btn-outline-secondary'">Tất cả</a>
+        <a th:each="s : ${statuses}" th:href="@{/admin/reviews(status=${s})}" class="btn btn-sm"
+           th:classappend="${selectedStatus == s} ? 'btn-primary' : 'btn-outline-secondary'"
+           th:text="${s}">PENDING</a>
+    </div>
+
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Sản phẩm</th>
+            <th>Người dùng</th>
+            <th>Sao</th>
+            <th>Nhận xét</th>
+            <th>Trạng thái</th>
+            <th>Ngày</th>
+            <th>Thao tác</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="r : ${reviews}">
+            <td th:text="${r.id}">1</td>
+            <td th:text="${r.productName}">Product</td>
+            <td th:text="${r.username}">user</td>
+            <td>
+                <span th:text="${r.rating}"></span> ★
+            </td>
+            <td th:text="${r.comment}">comment</td>
+            <td>
+                <span class="badge" th:classappend="|
+                    ${r.status == 'PENDING'} ? 'bg-warning' :
+                    ${r.status == 'APPROVED'} ? 'bg-success' : 'bg-danger'
+                |" th:text="${r.status}">PENDING</span>
+            </td>
+            <td th:text="${#temporals.format(r.createdAt, 'yyyy-MM-dd')}">date</td>
+            <td>
+                <a th:href="@{/admin/reviews/{id}(id=${r.id})}" class="btn btn-sm btn-info">Xem</a>
+                <form th:if="${r.status == 'PENDING'}" th:action="@{/admin/reviews/{id}/approve(id=${r.id})}" method="post" style="display:inline;">
+                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                    <button type="submit" class="btn btn-sm btn-success">Duyệt</button>
+                </form>
+                <form th:if="${r.status == 'PENDING'}" th:action="@{/admin/reviews/{id}/reject(id=${r.id})}" method="post" style="display:inline;">
+                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                    <button type="submit" class="btn btn-sm btn-warning">Từ chối</button>
+                </form>
+                <form th:action="@{/admin/reviews/{id}/delete(id=${r.id})}" method="post" style="display:inline;" onsubmit="return confirm('Xóa đánh giá này?')">
+                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                    <button type="submit" class="btn btn-sm btn-danger">Xóa</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</th:block>
+</body>
+</html>

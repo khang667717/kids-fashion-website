@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout :: layout(view='admin-coupon-form')}">
+<head>
+    <title th:if="${coupon.id == null}">Thêm mã giảm giá</title>
+    <title th:if="${coupon.id != null}">Sửa mã giảm giá</title>
+</head>
+<body>
+<th:block th:fragment="content">
+    <h1 th:if="${coupon.id == null}">Thêm mã giảm giá</h1>
+    <h1 th:if="${coupon.id != null}">Sửa mã giảm giá</h1>
+    <form method="post" th:action="@{/admin/coupons/save}">
+        <input type="hidden" name="id" th:value="${coupon.id}">
+        <div class="mb-3">
+            <label for="code" class="form-label">Mã</label>
+            <input type="text" class="form-control" id="code" name="code" th:value="${coupon.code}" required>
+        </div>
+        <div class="mb-3">
+            <label for="discountPercent" class="form-label">Phần trăm giảm</label>
+            <input type="number" step="0.01" class="form-control" id="discountPercent" name="discountPercent" th:value="${coupon.discountPercent}" required>
+        </div>
+        <div class="mb-3">
+            <label for="startDate" class="form-label">Ngày bắt đầu</label>
+            <input type="date" class="form-control" id="startDate" name="startDate" th:value="${coupon.startDate}" required>
+        </div>
+        <div class="mb-3">
+            <label for="endDate" class="form-label">Ngày kết thúc</label>
+            <input type="date" class="form-control" id="endDate" name="endDate" th:value="${coupon.endDate}" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Lưu</button>
+        <a href="/admin/coupons" class="btn btn-secondary">Hủy</a>
+    </form>
+</th:block>
+</body>
+</html>

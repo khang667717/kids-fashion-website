@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout :: layout(view='logout')}">
+<head>
+    <title>Đăng xuất - Kids Fashion</title>
+</head>
+<body>
+<th:block th:fragment="content">
+    <div class="text-center py-5">
+        <div class="mb-4">
+            <i class="fas fa-check-circle text-success" style="font-size: 5rem;"></i>
+        </div>
+
+        <h2 class="mb-3">Bạn đã đăng xuất thành công!</h2>
+
+        <p class="lead text-muted mb-4">
+            Cảm ơn bạn đã ghé thăm Kids Fashion Store.<br>
+            Hy vọng sớm gặp lại bạn!
+        </p>
+
+        <div class="mt-4">
+            <a href="/" class="btn btn-primary btn-lg me-2">
+                <i class="fas fa-home me-2"></i>Về trang chủ
+            </a>
+            <!-- SỬA: Nút Login Again mở modal thay vì chuyển trang -->
+            <button onclick="openLoginModal()" class="btn btn-outline-primary btn-lg">
+                <i class="fas fa-sign-in-alt me-2"></i>Đăng nhập lại
+            </button>
+        </div>
+
+        <div class="mt-5">
+            <p>Khám phá bộ sưu tập mới nhất của chúng tôi?</p>
+            <a href="/products" class="btn btn-success">
+                <i class="fas fa-shopping-bag me-2"></i>Xem sản phẩm
+            </a>
+        </div>
+    </div>
+
+    <!-- Thêm script để mở modal login -->
+    <script>
+        function openLoginModal() {
+            // Kiểm tra xem modal có tồn tại không
+            const modalEl = document.getElementById('loginModal');
+            if (modalEl) {
+                // Dùng Bootstrap Modal
+                const loginModal = new bootstrap.Modal(modalEl);
+                loginModal.show();
+
+                // Reset form và lỗi
+                const errorDiv = document.getElementById('modalLoginError');
+                if (errorDiv) errorDiv.style.display = 'none';
+
+                const form = document.querySelector('#loginModal form');
+                if (form) form.reset();
+            } else {
+                console.error('Login modal not found!');
+                // Fallback: chuyển đến trang login nếu modal không tồn tại
+                window.location.href = '/login';
+            }
+        }
+    </script>
+</th:block>
+</body>
+</html>

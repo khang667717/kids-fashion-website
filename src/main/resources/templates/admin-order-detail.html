@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout :: layout(view='admin-order-detail')}">
+<head>
+    <title>Order #<span th:text="${order.id}"></span></title>
+    <style>
+        /* ===== STATUS BADGE - MÀU ĐEN, NỀN GRADIENT ===== */
+        .status-badge {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: 600;
+            color: black !important;
+            margin-left: 10px;
+            font-size: 0.95rem;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .status-pending {
+            background: linear-gradient(135deg, #6366f1, #2dd4bf);
+        }
+
+        .status-processing {
+            background: linear-gradient(135deg, #8b5cf6, #5eead4);
+        }
+
+        .status-shipped {
+            background: linear-gradient(135deg, #4f46e5, #14b8a6);
+        }
+
+        .status-delivered {
+            background: linear-gradient(135deg, #2dd4bf, #6366f1);
+        }
+
+        .status-cancelled {
+            background: linear-gradient(135deg, #f87171, #ef4444);
+        }
+
+        /* Hover effect */
+        .status-badge:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+        }
+    </style>
+</head>
+<body>
+<th:block th:fragment="content">
+    <h1>Đơn hàng #<span th:text="${order.id}"></span></h1>
+    <p><strong>Khách hàng:</strong> <span th:text="${order.username}"></span></p>
+    <p><strong>Ngày:</strong> <span th:text="${#temporals.format(order.createdAt, 'yyyy-MM-dd HH:mm')}"></span></p>
+    <p>
+        <strong>Trạng thái:</strong>
+        <!-- Status badge với màu đen -->
+        <span class="status-badge" th:classappend="|
+            ${order.status == 'PENDING'} ? 'status-pending' :
+            ${order.status == 'PROCESSING'} ? 'status-processing' :
+            ${order.status == 'SHIPPED'} ? 'status-shipped' :
+            ${order.status == 'DELIVERED'} ? 'status-delivered' :
+            ${order.status == 'CANCELLED'} ? 'status-cancelled' : ''
+        |" th:text="${order.status}">PENDING</span>
+
+    <form method="post" th:action="@{/admin/orders/update-status}" class="d-inline ms-3">
+        <input type="hidden" name="orderId" th:value="${order.id}">
+        <select name="status" class="form-select d-inline w-auto">
+            <option value="PENDING" th:selected="${order.status == 'PENDING'}">PENDING</option>
+            <option value="PROCESSING" th:selected="${order.status == 'PROCESSING'}">PROCESSING</option>
+            <option value="SHIPPED" th:selected="${order.status == 'SHIPPED'}">SHIPPED</option>
+            <option value="DELIVERED" th:selected="${order.status == 'DELIVERED'}">DELIVERED</option>
+            <option value="CANCELLED" th:selected="${order.status == 'CANCELLED'}">CANCELLED</option>
+        </select>
+        <button type="submit" class="btn btn-sm btn-primary">Cập nhật</button>
+    </form>
+    </p>
+
+    <h3>Sản phẩm</h3>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Sản phẩm</th>
+            <th>Size</th>
+            <th>Số lượng</th>
+            <th>Giá</th>
+            <th>Tổng</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="item : ${order.items}">
+            <td th:text="${item.productName}"></td>
+            <td th:text="${item.size}">M</td>
+            <td th:text="${item.quantity}"></td>
+            <td th:text="${#numbers.formatInteger(item.price, 1, 'POINT')} + 'đ'"></td>
+            <td th:text="${#numbers.formatInteger(item.price * item.quantity, 1, 'POINT')} + 'đ'"></td>
+        </tr>
+        </tbody>
+    </table>
+    <h4>Tổng: <span th:text="${#numbers.formatInteger(order.totalPrice, 1, 'POINT')}"></span>đ</h4>
+    <a href="/admin/orders" class="btn btn-secondary">Quay lại</a>
+</th:block>
+</body>
+</html>

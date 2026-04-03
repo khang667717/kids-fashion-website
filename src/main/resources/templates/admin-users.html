@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout :: layout(view='admin-users')}">
+<head>
+    <title>Quản lý người dùng</title>
+</head>
+<body>
+<th:block th:fragment="content">
+    <h1>Người dùng</h1>
+    <a href="/admin/users/new" class="btn btn-primary mb-3">Thêm người dùng mới</a>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Tên đăng nhập</th>
+            <th>Email</th>
+            <th>Vai trò</th>
+            <th>Ngày tạo</th>
+            <th>Thao tác</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="u : ${users}">
+            <td th:text="${u.id}">1</td>
+            <td th:text="${u.username}">user</td>
+            <td th:text="${u.email}">user@example.com</td>
+            <td th:text="${u.role}">ROLE_CUSTOMER</td>
+            <td th:text="${#temporals.format(u.createdAt, 'yyyy-MM-dd HH:mm')}">2025-01-01</td>
+            <td>
+                <a th:href="@{/admin/users/edit/{id}(id=${u.id})}" class="btn btn-sm btn-warning">Sửa</a>
+                <a th:href="@{/admin/users/delete/{id}(id=${u.id})}" class="btn btn-sm btn-danger"
+                   onclick="return confirm('Bạn có chắc chắn?')">Xóa</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</th:block>
+</body>
+</html>

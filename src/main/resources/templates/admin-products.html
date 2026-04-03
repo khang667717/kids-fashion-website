@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout :: layout(view='admin-products')}">
+<head>
+    <title>Quản lý sản phẩm - Quản trị</title>
+</head>
+<body>
+<th:block th:fragment="content">
+    
+    <!-- Header Page -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="h4 mb-0 text-gray-800">Quản lý Sản Phẩm</h2>
+        <a href="/admin/products/new" class="btn btn-dark rounded-0 text-uppercase" style="letter-spacing: 0.05em; font-size: 0.85rem;">+ Thêm Mới</a>
+    </div>
+
+    <!-- Data Table Card -->
+    <div class="card border-0 shadow-sm rounded-3 mb-4">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th class="border-0 small text-muted text-uppercase py-3 px-4" style="letter-spacing: 0.05em;">Mã</th>
+                            <th class="border-0 small text-muted text-uppercase py-3" style="letter-spacing: 0.05em;">Hình ảnh</th>
+                            <th class="border-0 small text-muted text-uppercase py-3" style="letter-spacing: 0.05em;">Tên sản phẩm</th>
+                            <th class="border-0 small text-muted text-uppercase py-3" style="letter-spacing: 0.05em;">Danh mục</th>
+                            <th class="border-0 small text-muted text-uppercase py-3" style="letter-spacing: 0.05em;">Giá</th>
+                            <th class="border-0 small text-muted text-uppercase py-3" style="letter-spacing: 0.05em;">Tồn kho</th>
+                            <th class="border-0 text-end py-3 px-4"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="p : ${products}">
+                            <td class="border-bottom text-muted small px-4">#<span th:text="${p.id}">1</span></td>
+                            <td class="border-bottom">
+                                <div class="bg-light" style="width: 48px; aspect-ratio: 3/4; overflow: hidden;">
+                                    <img th:src="${p.imageUrl}" class="w-100 h-100" style="object-fit: cover;" alt="Img">
+                                </div>
+                            </td>
+                            <td class="border-bottom fw-medium text-dark" th:text="${p.name}">Product</td>
+                            <td class="border-bottom text-muted small" th:text="${p.categoryName}">Category</td>
+                            <td class="border-bottom text-dark" th:text="${#numbers.formatInteger(p.price, 1, 'POINT')} + 'đ'">0đ</td>
+                            <td class="border-bottom">
+                                <span class="badge rounded-pill fw-normal px-2" 
+                                    th:classappend="${p.stock > 10 ? 'bg-success bg-opacity-10 text-success' : (p.stock > 0 ? 'bg-warning bg-opacity-10 text-warning' : 'bg-danger bg-opacity-10 text-danger')}" 
+                                    th:text="${p.stock} + ' cái'">10
+                                </span>
+                            </td>
+                            <td class="border-bottom text-end px-4">
+                                <a th:href="@{/admin/products/edit/{id}(id=${p.id})}" class="btn btn-sm btn-outline-secondary rounded-0 me-2 border-0" title="Sửa"><i class="fas fa-edit"></i></a>
+                                <a th:href="@{/admin/products/delete/{id}(id=${p.id})}" class="btn btn-sm btn-outline-danger rounded-0 border-0" title="Xóa" onclick="return confirm('Toàn bộ dữ liệu của sản phẩm này sẽ bị xóa. Bạn có chắc chắn?')"><i class="fas fa-trash-alt"></i></a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Clean Pagination -->
+    <nav aria-label="Page navigation" th:if="${totalPages > 1}" class="mb-2">
+        <ul class="pagination justify-content-center mb-0">
+            <!-- Previous button « -->
+            <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
+                <a class="page-link rounded-0 border-0 text-dark bg-transparent" th:href="@{/admin/products(page=${currentPage-1})}" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+
+            <!-- Trang đầu tiên -->
+            <li class="page-item" th:classappend="${0 == currentPage} ? 'active'">
+                <a class="page-link rounded-0 border-0" th:classappend="${0 == currentPage} ? 'bg-dark text-white' : 'text-dark'" th:href="@{/admin/products(page=0)}">1</a>
+            </li>
+
+            <!-- Dấu ... đầu tiên nếu cần -->
+            <li class="page-item disabled" th:if="${currentPage > 3}">
+                <span class="page-link border-0 text-muted bg-transparent">...</span>
+            </li>
+
+            <!-- Các trang xung quanh trang hiện tại -->
+            <li class="page-item" th:each="i : ${#numbers.sequence( (currentPage - 2 > 1 ? currentPage - 2 : 1), (currentPage + 2 < totalPages - 2 ? currentPage + 2 : totalPages - 2) )}"
+                th:if="${i > 0 and i < totalPages - 1}"
+                th:classappend="${i == currentPage} ? 'active'">
+                <a class="page-link rounded-0 border-0" th:classappend="${i == currentPage} ? 'bg-dark text-white' : 'text-dark'" th:href="@{/admin/products(page=${i})}" th:text="${i + 1}">3</a>
+            </li>
+
+            <!-- Dấu ... cuối nếu cần -->
+            <li class="page-item disabled" th:if="${currentPage < totalPages - 4}">
+                <span class="page-link border-0 text-muted bg-transparent">...</span>
+            </li>
+
+            <!-- Trang cuối cùng -->
+            <li class="page-item" th:if="${totalPages > 1}" th:classappend="${totalPages - 1 == currentPage} ? 'active'">
+                <a class="page-link rounded-0 border-0" th:classappend="${totalPages - 1 == currentPage} ? 'bg-dark text-white' : 'text-dark'" th:href="@{/admin/products(page=${totalPages - 1})}" th:text="${totalPages}">10</a>
+            </li>
+
+            <!-- Next button » -->
+            <li class="page-item" th:classappend="${currentPage == totalPages-1} ? 'disabled'">
+                <a class="page-link rounded-0 border-0 text-dark bg-transparent" th:href="@{/admin/products(page=${currentPage+1})}" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+
+    <!-- Thông tin tổng số -->
+    <div class="text-center text-muted small" th:if="${totalProducts > 0}">
+        <span>Trang <span th:text="${currentPage + 1}">1</span> / <span th:text="${totalPages}">10</span>
+              (Tổng <span th:text="${totalProducts}">100</span> sản phẩm)
+        </span>
+    </div>
+
+</th:block>
+</body>
+</html>

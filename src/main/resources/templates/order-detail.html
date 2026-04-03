@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout :: layout(view='order-detail')}">
+<head>
+    <title>Order #<span th:text="${order.id}"></span></title>
+</head>
+<body>
+<th:block th:fragment="content">
+    <div class="row">
+        <div class="col-12">
+            <h2>Đơn hàng #<span th:text="${order.id}"></span></h2>
+            <p><strong>Ngày:</strong> <span th:text="${#temporals.format(order.createdAt, 'yyyy-MM-dd HH:mm')}"></span></p>
+            <p><strong>Trạng thái:</strong>
+                <span class="badge" th:classappend="|
+                    ${order.status == 'PENDING'} ? 'bg-warning' :
+                    ${order.status == 'PROCESSING'} ? 'bg-info' :
+                    ${order.status == 'SHIPPED'} ? 'bg-primary' :
+                    ${order.status == 'DELIVERED'} ? 'bg-success' : 'bg-secondary'
+                |" th:text="${order.status}">PENDING</span>
+            </p>
+
+            <h3 class="mt-4">Sản phẩm</h3>
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>Sản phẩm</th>
+                    <th>Size</th> <th>Số lượng</th>
+                    <th>Giá</th>
+                    <th>Tổng</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="item : ${order.items}">
+                    <td th:text="${item.productName}">Product</td>
+                    <td th:text="${item.size}">M</td>
+
+                    <td th:text="${item.quantity}">1</td>
+                    <td th:text="${#numbers.formatInteger(item.price, 1, 'POINT')} + 'đ'">0đ</td>
+                    <td th:text="${#numbers.formatInteger(item.price * item.quantity, 1, 'POINT')} + 'đ'">0đ</td>
+                </tr>
+                </tbody>
+                <tfoot>
+                <tr>
+                    <th colspan="4" class="text-end">Tổng cộng:</th>
+                    <th th:text="${#numbers.formatInteger(order.totalPrice, 1, 'POINT')} + 'đ'">0đ</th>
+                </tr>
+                </tfoot>
+            </table>
+
+            <div th:if="${order.appliedCoupon}" class="alert alert-info">
+                <strong>Mã giảm giá đã áp dụng:</strong> <span th:text="${order.appliedCoupon}"></span>
+            </div>
+
+            <a href="/orders" class="btn btn-secondary">Quay lại danh sách đơn hàng</a>
+        </div>
+    </div>
+</th:block>
+</body>
+</html>

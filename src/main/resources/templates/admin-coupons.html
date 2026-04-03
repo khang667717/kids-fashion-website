@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout :: layout(view='admin-coupons')}">
+<head>
+    <title>Quản lý mã giảm giá</title>
+</head>
+<body>
+<th:block th:fragment="content">
+    <h1>Mã giảm giá</h1>
+    <a href="/admin/coupons/new" class="btn btn-primary mb-3">Thêm mã mới</a>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Mã</th>
+            <th>Giảm giá %</th>
+            <th>Ngày bắt đầu</th>
+            <th>Ngày kết thúc</th>
+            <th>Thao tác</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="c : ${coupons}">
+            <td th:text="${c.id}">1</td>
+            <td th:text="${c.code}">CODE</td>
+            <td th:text="${c.discountPercent} + '%'">10%</td>
+            <td th:text="${c.startDate}">2025-01-01</td>
+            <td th:text="${c.endDate}">2025-12-31</td>
+            <td>
+                <a th:href="@{/admin/coupons/edit/{id}(id=${c.id})}" class="btn btn-sm btn-warning">Sửa</a>
+                <a th:href="@{/admin/coupons/delete/{id}(id=${c.id})}" class="btn btn-sm btn-danger" onclick="return confirm('Bạn có chắc chắn?')">Xóa</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</th:block>
+</body>
+</html>

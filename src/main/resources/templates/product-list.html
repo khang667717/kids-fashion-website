@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org" th:replace="~{layout :: layout(view='product-list')}">
+<head>
+    <title>Sản phẩm - Kids Fashion</title>
+</head>
+<body>
+<th:block th:fragment="content">
+    
+    <!-- Title Section -->
+    <div class="row align-items-center mb-5 pb-3 border-bottom">
+        <div class="col-md-6">
+            <h1 class="display-6 fw-normal text-uppercase m-0" style="letter-spacing: 0.05em;">Tất Cả Sản Phẩm</h1>
+            <p th:if="${keyword}" class="text-muted mt-2 mb-0">Kết quả tìm kiếm cho: <strong th:text="${keyword}"></strong></p>
+        </div>
+        <div class="col-md-6 text-md-end mt-3 mt-md-0">
+            <div class="d-inline-flex align-items-center">
+                <span class="text-muted text-uppercase me-3" style="font-size: 0.8rem; letter-spacing: 0.05em; white-space: nowrap;">Sắp xếp theo</span>
+                <select class="form-select border-0 shadow-none bg-light rounded-0" id="sortSelect" style="width: auto; font-size: 0.85rem;">
+                    <option value="id,asc" th:selected="${sortBy == 'id' and direction == 'asc'}">Mặc định</option>
+                    <option value="price,asc" th:selected="${sortBy == 'price' and direction == 'asc'}">Giá: Thấp đến Cao</option>
+                    <option value="price,desc" th:selected="${sortBy == 'price' and direction == 'desc'}">Giá: Cao đến Thấp</option>
+                    <option value="name,asc" th:selected="${sortBy == 'name' and direction == 'asc'}">Tên: A đến Z</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Sidebar Filters -->
+        <div class="col-md-3 mb-4 mb-md-0">
+            <h5 class="text-uppercase mb-3" style="letter-spacing: 0.05em; font-size: 0.95rem; font-weight: 500;">Danh mục</h5>
+            <ul class="list-group list-group-flush mb-4">
+                <!-- All categories -->
+                <li class="list-group-item bg-transparent border-0 px-0 py-2" th:classappend="${selectedCategory == null} ? 'active' : ''">
+                    <a th:href="@{/products}" class="text-decoration-none text-uppercase" style="font-size: 0.85rem; letter-spacing: 0.05em;">Tất cả sơ mi, áo thun, váy...</a>
+                </li>
+                <!-- Dynamic categories -->
+                <li class="list-group-item bg-transparent border-0 px-0 py-2" th:each="cat : ${categories}" th:classappend="${selectedCategory == cat.id} ? 'active' : ''">
+                    <a th:href="@{/products(category=${cat.id})}" class="text-decoration-none text-uppercase" style="font-size: 0.85rem; letter-spacing: 0.05em;" th:text="${cat.name}">Category</a>
+                </li>
+            </ul>
+
+            <!-- MOCK FILTER SIZE (Backend Sắp hỗ trợ) -->
+            <div class="filter-size-section mt-5 filter-disabled">
+                <span class="badge-coming-soon text-uppercase">Sắp ra mắt</span>
+                <h5 class="text-uppercase mb-3" style="letter-spacing: 0.05em; font-size: 0.95rem; font-weight: 500;">Kích cỡ</h5>
+                <div class="d-flex flex-wrap gap-2">
+                    <div class="form-check p-0 m-0">
+                        <input type="checkbox" class="btn-check" id="sizeS" disabled>
+                        <label class="btn btn-outline-dark rounded-0 px-3 py-1" for="sizeS" style="font-size: 0.85rem;">S</label>
+                    </div>
+                    <div class="form-check p-0 m-0">
+                        <input type="checkbox" class="btn-check" id="sizeM" disabled>
+                        <label class="btn btn-outline-dark rounded-0 px-3 py-1" for="sizeM" style="font-size: 0.85rem;">M</label>
+                    </div>
+                    <div class="form-check p-0 m-0">
+                        <input type="checkbox" class="btn-check" id="sizeL" disabled>
+                        <label class="btn btn-outline-dark rounded-0 px-3 py-1" for="sizeL" style="font-size: 0.85rem;">L</label>
+                    </div>
+                    <div class="form-check p-0 m-0">
+                        <input type="checkbox" class="btn-check" id="sizeXL" disabled>
+                        <label class="btn btn-outline-dark rounded-0 px-3 py-1" for="sizeXL" style="font-size: 0.85rem;">XL</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Product Grid -->
+        <div class="col-md-9">
+            <div th:if="${products.empty}" class="text-center py-5">
+                <i class="fas fa-box-open fa-3x text-light mb-3"></i>
+                <p class="text-muted">Rất tiếc! Không tìm thấy sản phẩm nào phù hợp.</p>
+                <a href="/products" class="btn btn-outline-primary mt-2">Xóa bộ lọc</a>
+            </div>
+
+            <div class="row g-4 mb-5">
+                <div class="col-6 col-md-4" th:each="product : ${products}">
+                    <div class="card h-100">
+                        <a th:href="@{/product/{id}(id=${product.id})}" class="text-decoration-none d-block position-relative">
+                            <img th:src="${product.imageUrl}" class="card-img-top mb-3" style="aspect-ratio: 3/4; object-fit: cover;" alt="Product Image" loading="lazy">
+                            
+                            <!-- Badges for styling -->
+                            <span th:if="${product.stock > 0 and product.stock <= 10}" class="position-absolute top-0 start-0 m-2 badge bg-danger rounded-0" style="font-size: 0.65rem;">Số lượng có hạn</span>
+                            <span th:if="${product.stock == 0}" class="position-absolute top-0 start-0 m-2 badge bg-dark rounded-0" style="font-size: 0.65rem;">Hết hàng</span>
+
+                            <div class="card-body">
+                                <h5 class="card-title text-dark mb-2" style="font-size: 0.95rem; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" th:text="${product.name}">Product Name</h5>
+                                <p class="card-text text-dark" style="font-weight: 600; font-size: 1.05rem; margin-bottom: 0;">
+                                    <span th:text="${#numbers.formatInteger(product.price, 1, 'POINT')} + 'đ'">0đ</span>
+                                </p>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pagination -->
+            <nav aria-label="Page navigation" th:if="${totalPages > 1}" class="mb-5">
+                <ul class="pagination justify-content-center">
+                    <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
+                        <a class="page-link rounded-0 border-0 bg-transparent text-dark" th:href="@{/products(page=${currentPage-1}, category=${selectedCategory}, sortBy=${sortBy}, direction=${direction}, keyword=${keyword})}">
+                            <i class="fas fa-chevron-left small"></i>
+                        </a>
+                    </li>
+                    <li class="page-item" th:each="i : ${#numbers.sequence(0, totalPages-1)}" th:classappend="${i == currentPage} ? 'active'">
+                        <a class="page-link rounded-0 border-0" th:href="@{/products(page=${i}, category=${selectedCategory}, sortBy=${sortBy}, direction=${direction}, keyword=${keyword})}" th:text="${i+1}">1</a>
+                    </li>
+                    <li class="page-item" th:classappend="${currentPage == totalPages-1} ? 'disabled'">
+                        <a class="page-link rounded-0 border-0 bg-transparent text-dark" th:href="@{/products(page=${currentPage+1}, category=${selectedCategory}, sortBy=${sortBy}, direction=${direction}, keyword=${keyword})}">
+                            <i class="fas fa-chevron-right small"></i>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('sortSelect').addEventListener('change', function() {
+            let value = this.value.split(',');
+            let url = new URL(window.location.href);
+            url.searchParams.set('sortBy', value[0]);
+            url.searchParams.set('direction', value[1]);
+            window.location.href = url.toString();
+        });
+    </script>
+</th:block>
+</body>
+</html>

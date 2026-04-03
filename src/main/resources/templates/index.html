@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org" th:replace="~{layout :: layout(view='index')}">
+
+<head>
+    <title>Kids Fashion - Trang Chủ</title>
+</head>
+
+<body>
+    <th:block th:fragment="content">
+
+        <!-- Hero Banner Carousel -->
+        <section class="hero-carousel-wrapper mb-5">
+            <div id="heroCarousel" class="carousel slide carousel-fade" data-bs-ride="carousel" data-bs-interval="5000">
+                <div class="carousel-inner">
+                    <!-- Slide 1 -->
+                    <div class="carousel-item active">
+                        <div class="carousel-image-container">
+                            <img src="https://images.unsplash.com/photo-1514090458221-65bb69cf63e6?auto=format&fit=crop&w=1600&q=80" class="d-block w-100" alt="Bộ sưu tập hè 2026" loading="lazy" style="height: 60vh; object-fit: cover;">
+                        </div>
+                        <div class="carousel-caption d-flex flex-column justify-content-center align-items-center h-100" style="top: 0; bottom: 0;">
+                            <div class="caption-content p-4" style="background: rgba(252, 251, 249, 0.85); backdrop-filter: blur(8px); border-radius: var(--border-radius-lg); max-width: 600px; box-shadow: var(--shadow);">
+                                <h1 class="display-5 fw-normal text-uppercase mb-3" style="letter-spacing: 0.1em; color: var(--primary-dark);">Bộ Sưu Tập Hè 2026</h1>
+                                <p class="lead text-muted mb-4" style="font-size: 1.05rem;">Các thiết kế thoáng mát, 100% Cotton Organic cho bé tự do vận động dưới nắng hè.</p>
+                                <a href="/products" class="btn btn-primary px-5 py-3 text-uppercase" style="letter-spacing: 0.1em; font-size: 0.9rem;">Khám Phá Ngay</a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Slide 2 -->
+                    <div class="carousel-item">
+                        <div class="carousel-image-container">
+                            <img src="https://images.unsplash.com/photo-1622290291468-a28f7a7dc6a8?auto=format&fit=crop&w=1600&q=80" class="d-block w-100" alt="Giảm giá cuối mùa" loading="lazy" style="height: 60vh; object-fit: cover;">
+                        </div>
+                        <div class="carousel-caption d-flex flex-column justify-content-center align-items-center h-100" style="top: 0; bottom: 0;">
+                            <div class="caption-content p-4" style="background: rgba(252, 251, 249, 0.85); backdrop-filter: blur(8px); border-radius: var(--border-radius-lg); max-width: 600px; box-shadow: var(--shadow);">
+                                <h1 class="display-5 fw-normal text-uppercase mb-3 text-danger" style="letter-spacing: 0.1em;">Sale Đến 30%</h1>
+                                <p class="lead text-muted mb-4" style="font-size: 1.05rem;">Chỉ từ 199.000đ. Đừng bỏ lỡ cơ hội sắm đồ đẹp với giá siêu ưu đãi cho bé.</p>
+                                <a href="/products" class="btn btn-danger px-5 py-3 text-uppercase text-white" style="letter-spacing: 0.1em; font-size: 0.9rem;">Săn Sale Ngay</a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Slide 3 -->
+                    <div class="carousel-item">
+                        <div class="carousel-image-container">
+                            <img src="https://images.unsplash.com/photo-1519689680058-324335c77eba?auto=format&fit=crop&w=1600&q=80" class="d-block w-100" alt="Sự kiện đặc biệt" loading="lazy" style="height: 60vh; object-fit: cover;">
+                        </div>
+                        <div class="carousel-caption d-flex flex-column justify-content-center align-items-center h-100" style="top: 0; bottom: 0;">
+                            <div class="caption-content p-4" style="background: rgba(252, 251, 249, 0.85); backdrop-filter: blur(8px); border-radius: var(--border-radius-lg); max-width: 600px; box-shadow: var(--shadow);">
+                                <h1 class="display-5 fw-normal text-uppercase mb-3" style="letter-spacing: 0.1em; color: var(--text-main);">Lễ Hội Bé Yêu</h1>
+                                <p class="lead text-muted mb-4" style="font-size: 1.05rem;">Mang đến phong cách rực rỡ, lấp lánh cho những ngày kỷ niệm đặc biệt của bé.</p>
+                                <a href="/products" class="btn btn-outline-primary px-5 py-3 text-uppercase" style="letter-spacing: 0.1em; font-size: 0.9rem;">Xem Bộ Sưu Tập</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Controls -->
+                <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev" style="width: 5%;">
+                    <span class="carousel-control-prev-icon bg-dark rounded-circle p-3" aria-hidden="true" style="width: 40px; height: 40px; background-size: 50%; opacity: 0.8;"></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next" style="width: 5%;">
+                    <span class="carousel-control-next-icon bg-dark rounded-circle p-3" aria-hidden="true" style="width: 40px; height: 40px; background-size: 50%; opacity: 0.8;"></span>
+                    <span class="visually-hidden">Next</span>
+                </button>
+            </div>
+        </section>
+
+        <!-- Categories / Curated Collections -->
+        <section class="categories container mb-5 pb-4">
+            <div class="d-flex justify-content-between align-items-end mb-4">
+                <h2 style="font-size: 1.25rem; font-weight: 500;">Danh Mục Phổ Biến</h2>
+                <a href="/products" class="text-muted text-decoration-none text-uppercase"
+                    style="font-size: 0.75rem; letter-spacing: 0.1em;">Xem Tất Cả ></a>
+            </div>
+            <div class="row g-4">
+                <div class="col-6 col-md-3" th:each="cat : ${categories}">
+                    <a th:href="@{/products(category=${cat.id})}" class="text-decoration-none">
+                        <div class="card bg-light border-0"
+                            style="min-height: 180px; display: flex; align-items: center; justify-content: center; transition: background-color 0.3s;">
+                            <div class="card-body text-center p-4">
+                                <h5 class="card-title text-dark m-0" style="font-size: 1.1rem; font-weight: 400;"
+                                    th:text="${cat.name}">Category</h5>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Latest Products -->
+        <section class="latest-products container mb-5 pb-4">
+            <div class="d-flex justify-content-between align-items-end mb-4">
+                <h2 style="font-size: 1.25rem; font-weight: 500;">Hàng Mới Về</h2>
+            </div>
+            <div class="row g-4">
+                <div class="col-6 col-md-3 mb-4" th:each="product : ${latestProducts}">
+                    <div class="card h-100">
+                        <a th:href="@{/product/{id}(id=${product.id})}" class="text-decoration-none">
+                            <img th:src="${product.imageUrl}" class="card-img-top mb-3"
+                                style="aspect-ratio: 3/4; object-fit: cover;" alt="Product Image" loading="lazy">
+                            <div class="card-body">
+                                <h5 class="card-title text-dark mb-2"
+                                    style="font-size: 0.95rem; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"
+                                    th:text="${product.name}">Product Name</h5>
+                                <p class="card-text text-dark"
+                                    style="font-weight: 600; font-size: 1.05rem; margin-bottom: 0;"
+                                    th:text="${#numbers.formatInteger(product.price, 1, 'POINT')} + 'đ'">0đ</p>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Content / Trust Storytelling -->
+        <section class="container mb-5 py-5 border-top border-bottom text-center">
+            <div class="row justify-content-center">
+                <div class="col-md-8">
+                    <h3 class="mb-3 text-uppercase" style="font-size: 1.1rem; letter-spacing: 0.1em; font-weight: 500;">
+                        Chất Lượng Là Ưu Tiên Hàng Đầu</h3>
+                    <p class="text-muted mb-0" style="font-size: 0.95rem; line-height: 1.6;">
+                        Mỗi thiết kế đều được chăm chút kỹ lưỡng từ khâu chọn vải đến đường may.
+                        Chúng tôi cam kết sử dụng chất liệu an toàn, không gây kích ứng cho làn da nhạy cảm của bé.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Best Sellers -->
+        <section class="best-sellers container my-5">
+            <div class="d-flex justify-content-between align-items-end mb-4">
+                <h2 style="font-size: 1.25rem; font-weight: 500;">Sản Phẩm Bán Chạy</h2>
+            </div>
+            <div class="row g-4">
+                <div class="col-6 col-md-3 mb-4" th:each="product : ${bestSelling}">
+                    <div class="card h-100">
+                        <a th:href="@{/product/{id}(id=${product.id})}" class="text-decoration-none">
+                            <img th:src="${product.imageUrl}" class="card-img-top mb-3"
+                                style="aspect-ratio: 3/4; object-fit: cover;" alt="Product Image" loading="lazy">
+                            <div class="card-body">
+                                <h5 class="card-title text-dark mb-2"
+                                    style="font-size: 0.95rem; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"
+                                    th:text="${product.name}">Product Name</h5>
+                                <p class="card-text text-dark"
+                                    style="font-weight: 600; font-size: 1.05rem; margin-bottom: 0;"
+                                    th:text="${#numbers.formatInteger(product.price, 1, 'POINT')} + 'đ'">0đ</p>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </th:block>
+</body>
+
+</html>

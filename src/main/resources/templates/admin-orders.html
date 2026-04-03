@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout :: layout(view='admin-orders')}">
+<head>
+    <title>Quản lý đơn hàng - Quản trị</title>
+</head>
+<body>
+<th:block th:fragment="content">
+    
+    <!-- Header Page -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="h4 mb-0 text-gray-800">Quản lý Đơn Hàng</h2>
+        <span class="text-muted small">Tổng số: <strong th:text="${totalItems}">0</strong> đơn hàng</span>
+    </div>
+
+    <!-- Data Table Card -->
+    <div class="card border-0 shadow-sm rounded-3 mb-4">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th class="border-0 small text-muted text-uppercase py-3 px-4" style="letter-spacing: 0.05em;">Mã đơn</th>
+                            <th class="border-0 small text-muted text-uppercase py-3" style="letter-spacing: 0.05em;">Khách hàng</th>
+                            <th class="border-0 small text-muted text-uppercase py-3" style="letter-spacing: 0.05em;">Ngày đặt</th>
+                            <th class="border-0 small text-muted text-uppercase py-3 text-end" style="letter-spacing: 0.05em;">Tổng tiền</th>
+                            <th class="border-0 small text-muted text-uppercase py-3 text-center" style="letter-spacing: 0.05em;">Trạng thái</th>
+                            <th class="border-0 text-end py-3 px-4"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="o : ${orders}">
+                            <td class="border-bottom px-4">
+                                <span class="text-primary fw-medium">#<span th:text="${o.id}">1</span></span>
+                            </td>
+                            <td class="border-bottom text-dark" th:text="${o.username}">user</td>
+                            <td class="border-bottom text-muted small" th:text="${#temporals.format(o.createdAt, 'dd/MM/yyyy HH:mm')}">date</td>
+                            <td class="border-bottom text-dark fw-medium text-end" th:text="${#numbers.formatInteger(o.totalPrice, 1, 'POINT')} + 'đ'">0đ</td>
+                            <td class="border-bottom text-center">
+                                <span class="badge rounded-pill fw-normal px-2 border"
+                                    th:classappend="|
+                                        ${o.status == 'PENDING'} ? 'bg-warning bg-opacity-10 text-warning border-warning' :
+                                        ${o.status == 'PROCESSING'} ? 'bg-primary bg-opacity-10 text-primary border-primary' :
+                                        ${o.status == 'SHIPPED'} ? 'bg-info bg-opacity-10 text-info border-info' :
+                                        ${o.status == 'DELIVERED'} ? 'bg-success bg-opacity-10 text-success border-success' :
+                                        ${o.status == 'CANCELLED'} ? 'bg-danger bg-opacity-10 text-danger border-danger' : 'bg-light text-dark'
+                                    |" th:text="${o.status}">PENDING
+                                </span>
+                            </td>
+                            <td class="border-bottom text-end px-4">
+                                <a th:href="@{/admin/orders/{id}(id=${o.id})}" class="btn btn-sm btn-outline-secondary rounded-0 border-0" title="Chi tiết"><i class="fas fa-eye"></i></a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div th:if="${totalItems == 0}" class="text-center py-5 text-muted">
+                Không tìm thấy đơn hàng nào.
+            </div>
+        </div>
+    </div>
+
+    <!-- Clean Pagination -->
+    <nav aria-label="Page navigation" th:if="${totalPages > 1}" class="mb-2">
+        <ul class="pagination justify-content-center mb-0">
+            <!-- Nút Previous -->
+            <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
+                <a class="page-link rounded-0 border-0 text-dark bg-transparent" th:href="@{/admin/orders(page=${currentPage - 1})}" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+
+            <!-- Các số trang -->
+            <li class="page-item" th:each="i : ${#numbers.sequence(0, totalPages - 1)}"
+                th:classappend="${i == currentPage} ? 'active'">
+                <a class="page-link rounded-0 border-0" th:classappend="${i == currentPage} ? 'bg-dark text-white' : 'text-dark bg-transparent'" th:href="@{/admin/orders(page=${i})}" th:text="${i + 1}">1</a>
+            </li>
+
+            <!-- Nút Next -->
+            <li class="page-item" th:classappend="${currentPage == totalPages - 1} ? 'disabled'">
+                <a class="page-link rounded-0 border-0 text-dark bg-transparent" th:href="@{/admin/orders(page=${currentPage + 1})}" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+
+    <!-- Thông tin phân trang -->
+    <div th:if="${totalItems > 0}" class="text-center text-muted small mb-5">
+        <span>
+            Trang <span th:text="${currentPage + 1}">1</span> / <span th:text="${totalPages}">1</span>
+        </span>
+    </div>
+
+</th:block>
+</body>
+</html>

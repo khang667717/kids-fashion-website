@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout :: layout(view='register')}">
+<head>
+    <title>Đăng ký - Kids Fashion</title>
+</head>
+<body>
+<th:block th:fragment="content">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <h2 class="text-center mb-4">Tạo tài khoản mới</h2>
+
+            <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+
+            <form method="post" th:action="@{/register}">
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+
+                <div class="mb-3">
+                    <label for="username" class="form-label">Tên đăng nhập *</label>
+                    <input type="text" class="form-control" id="username" name="username" required
+                           pattern="[a-zA-Z0-9]{3,20}" title="Username must be 3-20 characters (letters and numbers only)">
+                </div>
+
+                <div class="mb-3">
+                    <label for="email" class="form-label">Email *</label>
+                    <input type="email" class="form-control" id="email" name="email" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="password" class="form-label">Mật khẩu *</label>
+                    <input type="password" class="form-control" id="password" name="password" required minlength="6">
+                    <div class="form-text">Mật khẩu phải có ít nhất 6 ký tự</div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="confirmPassword" class="form-label">Xác nhận mật khẩu *</label>
+                    <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" required>
+                </div>
+
+                <button type="submit" class="btn btn-primary w-100">Đăng ký</button>
+            </form>
+
+            <p class="mt-3 text-center">
+                Đã có tài khoản?
+                <!-- Sửa thành nút mở modal thay vì link -->
+                <a href="#" data-bs-toggle="modal" data-bs-target="#loginModal">Đăng nhập tại đây</a>
+            </p>
+            </p>
+        </div>
+    </div>
+
+    <script>
+        document.querySelector('form').addEventListener('submit', function(e) {
+            const password = document.getElementById('password').value;
+            const confirm = document.getElementById('confirmPassword').value;
+
+            if (password !== confirm) {
+                e.preventDefault();
+                alert('Mật khẩu không khớp!');
+            }
+        });
+    </script>
+</th:block>
+</body>
+</html>

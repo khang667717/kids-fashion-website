@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout :: layout(view='orders')}">
+<head>
+    <title>Đơn hàng của tôi</title>
+    <style>
+        /* ===== STATUS BADGES - MÀU ĐEN, NỀN GRADIENT ===== */
+        .status-badge {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-weight: 600;
+            color: black !important;
+            font-size: 0.875rem;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .status-badge:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+
+        .status-pending {
+            background: linear-gradient(135deg, #6366f1, #2dd4bf);
+        }
+
+        .status-processing {
+            background: linear-gradient(135deg, #8b5cf6, #5eead4);
+        }
+
+        .status-shipped {
+            background: linear-gradient(135deg, #4f46e5, #14b8a6);
+        }
+
+        .status-delivered {
+            background: linear-gradient(135deg, #2dd4bf, #6366f1);
+        }
+
+        .status-cancelled {
+            background: linear-gradient(135deg, #f87171, #ef4444);
+        }
+    </style>
+</head>
+<body>
+<th:block th:fragment="content">
+    <h2>Đơn hàng của tôi</h2>
+
+    <table class="table table-striped" th:if="${not #lists.isEmpty(orders)}">
+        <thead>
+        <tr>
+            <th>Mã đơn</th>
+            <th>Tổng</th>
+            <th>Trạng thái</th>
+            <th>Ngày</th>
+            <th>Thao tác</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="order : ${orders}">
+            <td th:text="${order.id}">1</td>
+            <td th:text="${#numbers.formatInteger(order.totalPrice, 1, 'POINT')} + 'đ'">0đ</td>
+            <td>
+                <!-- Sử dụng class riêng thay vì badge Bootstrap -->
+                <span class="status-badge" th:classappend="|
+                    ${order.status == 'PENDING'} ? 'status-pending' :
+                    ${order.status == 'PROCESSING'} ? 'status-processing' :
+                    ${order.status == 'SHIPPED'} ? 'status-shipped' :
+                    ${order.status == 'DELIVERED'} ? 'status-delivered' :
+                    ${order.status == 'CANCELLED'} ? 'status-cancelled' : 'bg-secondary'
+                |" th:text="${order.status}">PENDING</span>
+            </td>
+            <td th:text="${#temporals.format(order.createdAt, 'yyyy-MM-dd HH:mm')}">date</td>
+            <td>
+                <a th:href="@{/order/{id}(id=${order.id})}" class="btn btn-sm btn-info">Xem</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <div th:if="${#lists.isEmpty(orders)}" class="text-center py-5">
+        <p class="lead">Bạn chưa có đơn hàng nào.</p>
+        <a href="/products" class="btn btn-primary">Bắt đầu mua sắm</a>
+    </div>
+</th:block>
+</body>
+</html>

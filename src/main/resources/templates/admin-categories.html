@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout :: layout(view='admin-categories')}">
+<head>
+    <title>Quản lý danh mục</title>
+</head>
+<body>
+<th:block th:fragment="content">
+    <h1>Danh mục</h1>
+    <a href="/admin/categories/new" class="btn btn-primary mb-3">Thêm danh mục mới</a>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Tên</th>
+            <th>Mô tả</th>
+            <th>Thao tác</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="c : ${categories}">
+            <td th:text="${c.id}">1</td>
+            <td th:text="${c.name}">Category</td>
+            <td th:text="${c.description}">Description</td>
+            <td>
+                <a th:href="@{/admin/categories/edit/{id}(id=${c.id})}" class="btn btn-sm btn-warning">Sửa</a>
+                <a th:href="@{/admin/categories/delete/{id}(id=${c.id})}" class="btn btn-sm btn-danger" onclick="return confirm('Bạn có chắc chắn?')">Xóa</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</th:block>
+</body>
+</html>

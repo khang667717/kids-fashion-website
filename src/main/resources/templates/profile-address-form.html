@@ -1,0 +1,133 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout :: layout(view='profile-address-form')}">
+<head>
+    <title>Form địa chỉ</title>
+</head>
+<body>
+<th:block th:fragment="content">
+
+    <div class="profile-page">
+        <div class="row justify-content-center">
+            <div class="col-lg-8 col-md-10">
+                <div class="profile-content">
+                    <div class="profile-content-header">
+                        <h4>
+                            <i class="fas fa-map-marker-alt me-2"></i>
+                            <span th:if="${isEdit}">Sửa địa chỉ</span>
+                            <span th:unless="${isEdit}">Thêm địa chỉ mới</span>
+                        </h4>
+                        <p class="text-muted mb-0">Nhập thông tin địa chỉ giao hàng của bạn</p>
+                    </div>
+
+                    <form th:action="@{/profile/addresses/save}" method="post" class="profile-form">
+                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                        <input type="hidden" name="id" th:value="${address.id}" th:if="${address.id != null}" />
+
+                        <div class="row g-3">
+                            <!-- Full Name -->
+                            <div class="col-md-6">
+                                <label for="addrFullName" class="form-label">Tên người nhận <span class="text-danger">*</span></label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-user"></i></span>
+                                    <input type="text" class="form-control" id="addrFullName" name="fullName"
+                                           th:value="${address.fullName}" placeholder="Họ tên người nhận" required>
+                                </div>
+                            </div>
+
+                            <!-- Phone -->
+                            <div class="col-md-6">
+                                <label for="addrPhone" class="form-label">Số điện thoại <span class="text-danger">*</span></label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-phone"></i></span>
+                                    <input type="tel" class="form-control" id="addrPhone" name="phone"
+                                           th:value="${address.phone}" placeholder="Số điện thoại" required>
+                                </div>
+                            </div>
+
+                            <!-- Address Line -->
+                            <div class="col-12">
+                                <label for="addressLine" class="form-label">Địa chỉ chi tiết <span class="text-danger">*</span></label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-home"></i></span>
+                                    <input type="text" class="form-control" id="addressLine" name="addressLine"
+                                           th:value="${address.addressLine}" placeholder="Số nhà, tên đường" required>
+                                </div>
+                            </div>
+
+                            <!-- Ward -->
+                            <div class="col-md-4">
+                                <label for="ward" class="form-label">Phường/Xã</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-map-signs"></i></span>
+                                    <input type="text" class="form-control" id="ward" name="ward"
+                                           th:value="${address.ward}" placeholder="Phường hoặc xã">
+                                </div>
+                            </div>
+
+                            <!-- District -->
+                            <div class="col-md-4">
+                                <label for="district" class="form-label">Quận/Huyện</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-map"></i></span>
+                                    <input type="text" class="form-control" id="district" name="district"
+                                           th:value="${address.district}" placeholder="Quận/Huyện">
+                                </div>
+                            </div>
+
+                            <!-- City -->
+                            <div class="col-md-4">
+                                <label for="city" class="form-label">Tỉnh/Thành phố <span class="text-danger">*</span></label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-city"></i></span>
+                                    <input type="text" class="form-control" id="city" name="city"
+                                           th:value="${address.city}" placeholder="Tỉnh hoặc thành phố" required>
+                                </div>
+                            </div>
+
+                            <!-- Label -->
+                            <div class="col-md-6">
+                                <label for="label" class="form-label">Nhãn địa chỉ</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-tag"></i></span>
+                                    <select class="form-select" id="label" name="label">
+                                        <option value="HOME" th:selected="${address.label == 'HOME' or address.label == null}">🏠 Nhà riêng</option>
+                                        <option value="WORK" th:selected="${address.label == 'WORK'}">🏢 Công ty</option>
+                                        <option value="OTHER" th:selected="${address.label == 'OTHER'}">📍 Khác</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Is Default -->
+                            <div class="col-md-6 d-flex align-items-end pb-2">
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" id="isDefault" name="isDefault" value="true"
+                                           th:checked="${address.isDefault}">
+                                    <label class="form-check-label" for="isDefault">
+                                        <i class="fas fa-star text-warning me-1"></i>Đặt làm địa chỉ mặc định
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Buttons -->
+                        <div class="d-flex gap-2 mt-4">
+                            <button type="submit" class="btn btn-primary px-4">
+                                <i class="fas fa-save me-2"></i>
+                                <span th:if="${isEdit}">Cập nhật địa chỉ</span>
+                                <span th:unless="${isEdit}">Lưu địa chỉ</span>
+                            </button>
+                            <a href="/profile/addresses" class="btn btn-outline-secondary px-4">
+                                <i class="fas fa-arrow-left me-2"></i>Quay lại
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</th:block>
+</body>
+</html>

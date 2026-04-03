@@ -1,0 +1,196 @@
+@font-face {
+  font-family: 'HM Sans Light';
+  src: url("../font/HMSans-Light.eot");
+  src: url("../font/HMSans-Light.eot?#iefix") format('eot'), url("../font/HMSans-Light.woff2") format('woff2'), url("../font/HMSans-Light.woff") format('woff');
+  font-display: swap;
+  mso-font-alt: 'Arial';
+}
+@font-face {
+  font-family: 'HM Sans Light Italic';
+  src: url("../font/HMSans-LightItalic.eot");
+  src: url("../font/HMSans-LightItalic.eot?#iefix") format('eot'), url("../font/HMSans-LightItalic.woff2") format('woff2'), url("../font/HMSans-LightItalic.woff") format('woff');
+  font-display: swap;
+  mso-font-alt: 'Arial';
+}
+@font-face {
+  font-family: 'HM Sans Regular';
+  src: url("../font/HMSans-Regular.eot");
+  src: url("../font/HMSans-Regular.eot?#iefix") format('eot'), url("../font/HMSans-Regular.woff2") format('woff2'), url("../font/HMSans-Regular.woff") format('woff');
+  font-display: swap;
+  mso-font-alt: 'Arial';
+}
+@font-face {
+  font-family: 'HM Sans Italic';
+  src: url("../font/HMSans-Italic.eot");
+  src: url("../font/HMSans-Italic.eot?#iefix") format('eot'), url("../font/HMSans-Italic.woff2") format('woff2'), url("../font/HMSans-Italic.woff") format('woff');
+  font-display: swap;
+  mso-font-alt: 'Arial';
+}
+@font-face {
+  font-family: 'HM Sans Semi Bold';
+  src: url("../font/HMSans-SemiBold.eot");
+  src: url("../font/HMSans-SemiBold.eot?#iefix") format('eot'), url("../font/HMSans-SemiBold.woff2") format('woff2'), url("../font/HMSans-SemiBold.woff") format('woff');
+  font-display: swap;
+  mso-font-alt: 'Arial';
+}
+@font-face {
+  font-family: 'HM Sans Semi Bold Italic';
+  src: url("../font/HMSans-SemiBoldItalic.eot");
+  src: url("../font/HMSans-SemiBoldItalic.eot?#iefix") format('eot'), url("../font/HMSans-SemiBoldItalic.woff2") format('woff2'), url("../font/HMSans-SemiBoldItalic.woff") format('woff');
+  font-display: swap;
+  mso-font-alt: 'Arial';
+}
+@font-face {
+  font-family: 'HM Sans Bold';
+  src: url("../font/HMSans-Bold.eot");
+  src: url("../font/HMSans-Bold.eot?#iefix") format('eot'), url("../font/HMSans-Bold.woff2") format('woff2'), url("../font/HMSans-Bold.woff") format('woff');
+  font-display: swap;
+  mso-font-alt: 'Arial';
+}
+@font-face {
+  font-family: 'HM Sans Bold Italic';
+  src: url("../font/HMSans-BoldItalic.eot");
+  src: url("../font/HMSans-BoldItalic.eot?#iefix") format('eot'), url("../font/HMSans-BoldItalic.woff2") format('woff2'), url("../font/HMSans-BoldItalic.woff") format('woff');
+  font-display: swap;
+  mso-font-alt: 'Arial';
+}
+@font-face {
+  font-family: 'HM Sans Condensed Black';
+  src: url("../font/HMSans-CondBlack.eot");
+  src: url("../font/HMSans-CondBlack.eot?#iefix") format('eot'), url("../font/HMSans-CondBlack.woff2") format('woff2'), url("../font/HMSans-CondBlack.woff") format('woff');
+  font-display: swap;
+  mso-font-alt: 'Arial';
+}
+@font-face {
+  font-family: 'HM Sans';
+  src: url("../font/HMSans-Light.eot");
+  src: url("../font/HMSans-Light.eot?#iefix") format('eot'), url("../font/HMSans-Light.woff2") format('woff2'), url("../font/HMSans-Light.woff") format('woff');
+  font-weight: 200;
+  font-style: normal;
+  font-display: swap;
+  mso-font-alt: 'Arial';
+}
+@font-face {
+  font-family: 'HM Sans';
+  src: url("../font/HMSans-LightItalic.eot");
+  src: url("../font/HMSans-LightItalic.eot?#iefix") format('eot'), url("../font/HMSans-LightItalic.woff2") format('woff2'), url("../font/HMSans-LightItalic.woff") format('woff');
+  font-weight: 200;
+  font-style: italic;
+  font-display: swap;
+  mso-font-alt: 'Arial';
+}
+@font-face {
+  font-family: 'HM Sans';
+  src: url("../font/HMSans-Regular.eot");
+  src: url("../font/HMSans-Regular.eot?#iefix") format('eot'), url("../font/HMSans-Regular.woff2") format('woff2'), url("../font/HMSans-Regular.woff") format('woff');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+  mso-font-alt: 'Arial';
+}
+@font-face {
+  font-family: 'HM Sans';
+  src: url("../font/HMSans-Italic.eot");
+  src: url("../font/HMSans-Italic.eot?#iefix") format('eot'), url("../font/HMSans-Italic.woff2") format('woff2'), url("../font/HMSans-Italic.woff") format('woff');
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+  mso-font-alt: 'Arial';
+}
+@font-face {
+  font-family: 'HM Sans';
+  src: url("../font/HMSans-SemiBold.eot");
+  src: url("../font/HMSans-SemiBold.eot?#iefix") format('eot'), url("../font/HMSans-SemiBold.woff2") format('woff2'), url("../font/HMSans-SemiBold.woff") format('woff');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+  mso-font-alt: 'Arial';
+}
+@font-face {
+  font-family: 'HM Sans';
+  src: url("../font/HMSans-SemiBoldItalic.eot");
+  src: url("../font/HMSans-SemiBoldItalic.eot?#iefix") format('eot'), url("../font/HMSans-SemiBoldItalic.woff2") format('woff2'), url("../font/HMSans-SemiBoldItalic.woff") format('woff');
+  font-weight: 600;
+  font-style: italic;
+  font-display: swap;
+  mso-font-alt: 'Arial';
+}
+@font-face {
+  font-family: 'HM Sans';
+  src: url("../font/HMSans-Bold.eot");
+  src: url("../font/HMSans-Bold.eot?#iefix") format('eot'), url("../font/HMSans-Bold.woff2") format('woff2'), url("../font/HMSans-Bold.woff") format('woff');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+  mso-font-alt: 'Arial';
+}
+@font-face {
+  font-family: 'HM Sans';
+  src: url("../font/HMSans-BoldItalic.eot");
+  src: url("../font/HMSans-BoldItalic.eot?#iefix") format('eot'), url("../font/HMSans-BoldItalic.woff2") format('woff2'), url("../font/HMSans-BoldItalic.woff") format('woff');
+  font-weight: 700;
+  font-style: italic;
+  font-display: swap;
+  mso-font-alt: 'Arial';
+}
+@font-face {
+  font-family: 'HM Sans';
+  src: url("../font/HMSans-CondBlack.eot");
+  src: url("../font/HMSans-CondBlack.eot?#iefix") format('eot'), url("../font/HMSans-CondBlack.woff2") format('woff2'), url("../font/HMSans-CondBlack.woff") format('woff');
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+  mso-font-alt: 'Arial';
+}
+@font-face {
+  font-family: 'HM Sergel Regular';
+  src: url("../font/HMSergel-Regular.woff2") format('woff2'), url("../font/HMSergel-Regular.woff") format('woff'), url("../font/HMSergel-Regular.ttf") format('truetype'), url("../font/HMSergel-Regular.otf") format('opentype');
+  font-display: swap;
+  mso-font-alt: 'Arial';
+}
+@font-face {
+  font-family: 'HM Sergel Italic';
+  src: url("../font/HMSergel-Italic.woff2") format('woff2'), url("../font/HMSergel-Italic.woff") format('woff'), url("../font/HMSergel-Italic.ttf") format('truetype'), url("../font/HMSergel-Italic.otf") format('opentype');
+  font-display: swap;
+  mso-font-alt: 'Arial';
+}
+@font-face {
+  font-family: 'HM Sergel Headline Regular';
+  src: url("../font/HMSergelHeadline-Regular.woff2") format('woff2'), url("../font/HMSergelHeadline-Regular.woff") format('woff'), url("../font/HMSergelHeadline-Regular.ttf") format('truetype'), url("../font/HMSergelHeadline-Regular.otf") format('opentype');
+  font-display: swap;
+  mso-font-alt: 'Arial';
+}
+@font-face {
+  font-family: 'HM Sergel Headline Italic';
+  src: url("../font/HMSergelHeadline-Italic.woff2") format('woff2'), url("../font/HMSergelHeadline-Italic.woff") format('woff'), url("../font/HMSergelHeadline-Italic.ttf") format('truetype'), url("../font/HMSergelHeadline-Italic.otf") format('opentype');
+  font-display: swap;
+  mso-font-alt: 'Arial';
+}
+@font-face {
+  font-family: 'HM Sergel';
+  src: url("../font/HMSergel-Regular.woff2") format('woff2'), url("../font/HMSergel-Regular.woff") format('woff'), url("../font/HMSergel-Regular.ttf") format('truetype'), url("../font/HMSergel-Regular.otf") format('opentype');
+  font-weight: 400;
+  font-style: regular;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'HM Sergel';
+  src: url("../font/HMSergel-Italic.woff2") format('woff2'), url("../font/HMSergel-Italic.woff") format('woff'), url("../font/HMSergel-Italic.ttf") format('truetype'), url("../font/HMSergel-Italic.otf") format('opentype');
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'HM Sergel Headline';
+  src: url("../font/HMSergelHeadline-Regular.woff2") format('woff2'), url("../font/HMSergelHeadline-Regular.woff") format('woff'), url("../font/HMSergelHeadline-Regular.ttf") format('truetype'), url("../font/HMSergelHeadline-Regular.otf") format('opentype');
+  font-weight: 400;
+  font-style: regular;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'HM Sergel Headline';
+  src: url("../font/HMSergelHeadline-Italic.woff2") format('woff2'), url("../font/HMSergelHeadline-Italic.woff") format('woff'), url("../font/HMSergelHeadline-Italic.ttf") format('truetype'), url("../font/HMSergelHeadline-Italic.otf") format('opentype');
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}

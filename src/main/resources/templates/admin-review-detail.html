@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout :: layout(view='admin-review-detail')}">
+<head>
+    <title>Chi tiết đánh giá</title>
+</head>
+<body>
+<th:block th:fragment="content">
+    <h1>Đánh giá #<span th:text="${review.id}"></span></h1>
+    <div class="card">
+        <div class="card-body">
+            <p><strong>Sản phẩm:</strong> <span th:text="${review.productName}"></span></p>
+            <p><strong>Người dùng:</strong> <span th:text="${review.username}"></span></p>
+            <p><strong>Sao:</strong> <span th:text="${review.rating}"></span> ★</p>
+            <p><strong>Nhận xét:</strong> <span th:text="${review.comment}"></span></p>
+            <p><strong>Trạng thái:</strong> <span class="badge" th:classappend="|
+                ${review.status == 'PENDING'} ? 'bg-warning' :
+                ${review.status == 'APPROVED'} ? 'bg-success' : 'bg-danger'
+            |" th:text="${review.status}"></span></p>
+            <p><strong>Ngày tạo:</strong> <span th:text="${#temporals.format(review.createdAt, 'yyyy-MM-dd HH:mm')}"></span></p>
+        </div>
+        <div class="card-footer">
+            <a href="/admin/reviews" class="btn btn-secondary">Quay lại</a>
+        </div>
+    </div>
+</th:block>
+</body>
+</html>
