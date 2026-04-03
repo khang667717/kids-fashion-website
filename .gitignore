@@ -58,7 +58,7 @@ application-secret.properties
 .vercel/output
 vercel.log
 
-# ===== Node.js (nếu có frontend build) =====
+# ===== Node.js =====
 node_modules/
 npm-debug.log*
 yarn-debug.log*
@@ -76,3 +76,29 @@ build/
 *.tmp
 *.temp
 .cache/
+
+# ===== ⚠️ THÊM CÁC DÒNG SAU ĐỂ LÀM SẠCH PROJECT =====
+
+# Salesforce (không liên quan)
+.sfdx/
+
+# File PDF, TXT, MD không cần thiết
+*.pdf
+Bai10_codespaces.txt
+walkthrough.md
+codebase_analysis.md
+PROJECT_REPORT.md
+CODESPACES_HOSTING_GUIDE.md
+
+# File HTML đã download (vi phạm bản quyền)
+uploads/*.html
+uploads/*_files/
+
+# Ảnh không rõ nguồn gốc (tùy chọn - nếu muốn giữ thì bỏ # ở dòng dưới)
+# uploads/*.webp
+# uploads/*.jpg
+# uploads/*.avif
+
+# File tạm từ trình duyệt
+*.download
+*.crdownload
