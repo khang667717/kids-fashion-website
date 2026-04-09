@@ -3,20 +3,23 @@ package com.example.kidsfashion.service;
 import com.example.kidsfashion.dto.OrderDTO;
 import com.example.kidsfashion.dto.OrderItemDTO;
 import com.example.kidsfashion.entity.*;
+import com.example.kidsfashion.repository.AddressRepository;
 import com.example.kidsfashion.repository.OrderRepository;
 import com.example.kidsfashion.repository.ProductRepository;
 import com.example.kidsfashion.repository.UserRepository;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.data.domain.Sort;  // Thêm import này
-import org.springframework.data.domain.Page;
+
 import java.math.BigDecimal;
-import java.util.Arrays;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -27,17 +30,26 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final UserRepository userRepository;
     private final ProductRepository productRepository;
+    private final AddressRepository addressRepository;
     private final CartService cartService;
     private final CouponService couponService;
     private final ModelMapper modelMapper;
 
     /**
-     * Tạo đơn hàng mới từ giỏ hàng trong session
+     * Tạo đơn hàng mới từ giỏ hàng trong session, gắn địa chỉ giao hàng.
      */
     @Transactional
-    public Order createOrder(Long userId, HttpSession session) {
+    public Order createOrder(Long userId, Long addressId, String paymentMethod, HttpSession session) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
+
+        // Lookup shipping address
+        Address address = addressRepository.findById(addressId)
+                .orElseThrow(() -> new RuntimeException("Address not found"));
+        // Kiểm tra ownership
+        if (!address.getUser().getId().equals(userId)) {
+            throw new RuntimeException("Address does not belong to current user");
+        }
 
         List<CartItem> cartItems = cartService.getCartItems(session);
         if (cartItems.isEmpty()) {
@@ -47,6 +59,13 @@ public class OrderService {
         Order order = new Order();
         order.setUser(user);
         order.setStatus("PENDING");
+        order.setPaymentMethod(paymentMethod);
+        order.setPaymentStatus("PENDING");
+
+        // Copy shipping address snapshot vào order
+        order.setShippingName(address.getFullName());
+        order.setShippingPhone(address.getPhone());
+        order.setShippingAddress(address.getFullAddress());
 
         // Xử lý giá tổng và Coupon
         BigDecimal total = cartService.getTotalPrice(session);
@@ -74,8 +93,6 @@ public class OrderService {
             orderItem.setProduct(product);
             orderItem.setQuantity(cartItem.getQuantity());
             orderItem.setPrice(cartItem.getPrice());
-
-            // ✅ QUAN TRỌNG: Lưu Size từ giỏ hàng vào chi tiết đơn hàng
             orderItem.setSize(cartItem.getSize());
 
             return orderItem;
@@ -150,12 +167,30 @@ public class OrderService {
     // Mock data cho Dashboard
     @Transactional(readOnly = true)
     public List<Double> getMonthlyRevenue() {
-        return Arrays.asList(1200.0, 1900.0, 3000.0, 2500.0, 4200.0, 3800.0);
+        // ✅ LẤY REAL DATA: Doanh thu 6 tháng gần nhất (Jan - Jun)
+        List<Double> monthlyRevenue = new ArrayList<>();
+        int currentYear = LocalDateTime.now().getYear();
+
+        for (int month = 1; month <= 6; month++) {
+            Double revenue = orderRepository.getMonthlyRevenueByMonthYear(month, currentYear);
+            monthlyRevenue.add(revenue != null ? revenue.doubleValue() : 0.0);
+        }
+
+        return monthlyRevenue;
     }
 
     @Transactional(readOnly = true)
     public List<Integer> getMonthlyOrderCounts() {
-        return Arrays.asList(15, 20, 25, 22, 30, 28);
+        // ✅ LẤY REAL DATA: Số đơn hàng 6 tháng gần nhất (Jan - Jun)
+        List<Integer> monthlyOrders = new ArrayList<>();
+        int currentYear = LocalDateTime.now().getYear();
+
+        for (int month = 1; month <= 6; month++) {
+            Long count = orderRepository.getMonthlyOrderCountByMonthYear(month, currentYear);
+            monthlyOrders.add(count != null ? count.intValue() : 0);
+        }
+
+        return monthlyOrders;
     }
 
 
@@ -168,16 +203,21 @@ public class OrderService {
         dto.setUserId(order.getUser().getId());
         dto.setUsername(order.getUser().getUsername());
 
-        // Đảm bảo Coupon được truyền đi
+        // Coupon
         dto.setAppliedCoupon(order.getAppliedCoupon());
 
-        // Chuyển đổi danh sách OrderItem sang OrderItemDTO (bao gồm cả Size)
+        // Shipping info snapshot
+        dto.setShippingName(order.getShippingName());
+        dto.setShippingPhone(order.getShippingPhone());
+        dto.setShippingAddress(order.getShippingAddress());
+
+        // Chuyển đổi danh sách OrderItem sang OrderItemDTO
         List<OrderItemDTO> itemDTOs = order.getOrderItems().stream()
                 .map(item -> new OrderItemDTO(
                         item.getProduct().getId(),
                         item.getProduct().getName(),
                         item.getQuantity(),
-                        item.getSize(), // ✅ Lấy Size thực tế từ database
+                        item.getSize(),
                         item.getPrice()
                 ))
                 .collect(Collectors.toList());

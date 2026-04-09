@@ -24,5 +24,8 @@ public class OrderDTO {
     private String status;
     private LocalDateTime createdAt;
     private List<OrderItemDTO> items;
-    private String appliedCoupon;  // ✅ THÊM TRƯỜNG NÀY
+    private String appliedCoupon;
+    private String shippingName;
+    private String shippingPhone;
+    private String shippingAddress;
 }

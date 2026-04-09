@@ -41,6 +41,26 @@ public class Order {
     @Column(name = "applied_coupon")
     private String appliedCoupon;
 
+    // Shipping address snapshot (lưu snapshot, không FK tới Address vì address có thể bị sửa/xóa)
+    @Column(name = "shipping_name")
+    private String shippingName;
+
+    @Column(name = "shipping_phone")
+    private String shippingPhone;
+
+    @Column(name = "shipping_address", columnDefinition = "TEXT")
+    private String shippingAddress;
+
+    // Các trường phục vụ thanh toán (VNPay / COD)
+    @Column(name = "payment_method")
+    private String paymentMethod; // "COD", "VNPAY"
+
+    @Column(name = "payment_status")
+    private String paymentStatus; // "PENDING", "PAID", "FAILED"
+
+    @Column(name = "vnp_txn_ref")
+    private String vnpTxnRef; // Mã giao dịch gửi sang VNPay
+
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderItem> orderItems = new ArrayList<>();
 

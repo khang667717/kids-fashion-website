@@ -26,4 +26,17 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
     boolean existsByUserIdAndProductIdAndStatus(@Param("userId") Long userId,
                                                 @Param("productId") Long productId,
                                                 @Param("status") String status);
+
+    // ✅ LẤY DOANH THU HÀNG THÁNG (năm hiện tại)
+    @Query("SELECT SUM(o.totalPrice) FROM Order o " +
+            "WHERE o.status = 'DELIVERED' " +
+            "AND MONTH(o.createdAt) = :month " +
+            "AND YEAR(o.createdAt) = :year")
+    Double getMonthlyRevenueByMonthYear(@Param("month") int month, @Param("year") int year);
+
+    // ✅ LẤY SỐ LƯỢNG ĐƠN HÀNG HÀNG THÁNG (năm hiện tại)
+    @Query("SELECT COUNT(o) FROM Order o " +
+            "WHERE MONTH(o.createdAt) = :month " +
+            "AND YEAR(o.createdAt) = :year")
+    Long getMonthlyOrderCountByMonthYear(@Param("month") int month, @Param("year") int year);
 }
