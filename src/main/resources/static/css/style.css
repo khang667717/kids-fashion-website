@@ -7,23 +7,30 @@
 
 :root {
     /* Brand Colors - Warm, Soothing, Earthy tones (Japandi Style) */
-    --primary-color: #8fa896; /* Soft pastel sage green / taupe */
+    --primary-color: #8fa896;
+    /* Soft pastel sage green / taupe */
     --primary-light: #b0c2b5;
     --primary-dark: #68806f;
 
-    --secondary-color: #f6f4f0; /* Very soft beige/cream for sections */
+    --secondary-color: #f6f4f0;
+    /* Very soft beige/cream for sections */
     --secondary-dark: #e8e4db;
 
     /* Semantic */
-    --accent-color: #d4a396; /* Soft dusty rose / coral */
-    --success-color: #799a77; /* Deeper soft green */
-    --danger-color: #c47676; /* Soft matte rust red */
+    --accent-color: #d4a396;
+    /* Soft dusty rose / coral */
+    --success-color: #799a77;
+    /* Deeper soft green */
+    --danger-color: #c47676;
+    /* Soft matte rust red */
 
     /* Grayscale & Backgrounds */
-    --bg-main: #fcfbf9; /* Warm pearl background, very easy on the eyes */
+    --bg-main: #fcfbf9;
+    /* Warm pearl background, very easy on the eyes */
     --bg-surface: #ffffff;
     --bg-surface-hover: #faf9f6;
-    --border-color: #e6e2d8; /* Warm gray-beige border */
+    --border-color: #e6e2d8;
+    /* Warm gray-beige border */
 
     /* Typography - Softened blacks (Dark brown tones for less contrast) */
     --text-main: #4a423e;
@@ -214,7 +221,8 @@ h2::after {
     background: var(--bg-surface);
     box-shadow: 2px 2px 0px rgba(34, 34, 34, 0.1);
     transition: all var(--transition-fast);
-    overflow: hidden; /* Đảm bảo hình ảnh bên trong không bị chẻ ra ngoài viền bo góc */
+    overflow: hidden;
+    /* Đảm bảo hình ảnh bên trong không bị chẻ ra ngoài viền bo góc */
 }
 
 .card:hover {
@@ -229,18 +237,21 @@ h2::after {
     object-fit: cover;
     background: var(--secondary-color);
     border-radius: 0;
-    border-bottom: 1.5px solid #222222; /* Thêm đường gạch phân tách ảnh và nội dung card */
+    border-bottom: 1.5px solid #222222;
+    /* Thêm đường gạch phân tách ảnh và nội dung card */
     transition: transform 0.4s ease;
 }
 
 .card:hover .card-img-top {
-    transform: scale(1.03); /* Phóng to nhẹ ảnh khi hover để có sức sống */
+    transform: scale(1.03);
+    /* Phóng to nhẹ ảnh khi hover để có sức sống */
 }
 
 /* Remove awkward zoom */
 
 .card-body {
-    padding: 1.25rem; /* Căn chỉnh lại khoảng cách lề trong để chữ không đụng mép thẻ */
+    padding: 1.25rem;
+    /* Căn chỉnh lại khoảng cách lề trong để chữ không đụng mép thẻ */
     text-align: left;
 }
 
@@ -268,16 +279,20 @@ h2::after {
 .categories .card {
     background: var(--bg-surface);
     min-height: 120px;
-    border: 1.5px solid #222222; /* Viền đen sắc nét nổi bật */
+    border: 1.5px solid #222222;
+    /* Viền đen sắc nét nổi bật */
     border-radius: var(--border-radius-lg);
-    box-shadow: 2px 2px 0px rgba(34, 34, 34, 0.1); /* Đổ bóng cứng tạo chiều sâu rõ ràng */
+    box-shadow: 2px 2px 0px rgba(34, 34, 34, 0.1);
+    /* Đổ bóng cứng tạo chiều sâu rõ ràng */
     transition: all var(--transition-fast);
 }
 
 .categories .card:hover {
-    border-color: #000000; /* Đen tuyền khi hover */
+    border-color: #000000;
+    /* Đen tuyền khi hover */
     background: var(--secondary-color);
-    box-shadow: 4px 4px 0px rgba(34, 34, 34, 0.15); /* Nổi bật hơn khi hover */
+    box-shadow: 4px 4px 0px rgba(34, 34, 34, 0.15);
+    /* Nổi bật hơn khi hover */
 }
 
 .categories .card-title {
@@ -513,7 +528,7 @@ footer a:hover {
 }
 
 .expandable-search-input.expanded {
-    width: 310px;
+    width: 340px;
     background-color: #f8f9fa;
     border-color: #ced4da;
     opacity: 1;
@@ -541,6 +556,7 @@ footer a:hover {
 .expandable-search-btn:hover {
     color: var(--primary-dark);
 }
+
 /* ===== USER PROFILE SECTION ===== */
 .profile-page {
     padding-top: 1rem;
@@ -596,7 +612,7 @@ footer a:hover {
     border-bottom: none;
 }
 
-.profile-menu a:hover, 
+.profile-menu a:hover,
 .profile-menu a.active {
     color: var(--primary-dark);
     background: var(--secondary-color);
@@ -707,18 +723,24 @@ footer a:hover {
     overflow: hidden;
     position: relative;
 }
+
 .hero-carousel-wrapper .carousel-item {
     transition: transform 1.5s ease-in-out, opacity 1.5s ease-in-out;
 }
+
 .hero-carousel-wrapper .carousel-image-container {
     overflow: hidden;
 }
+
 .hero-carousel-wrapper .carousel-item img {
     transform: scale(1);
-    transition: transform 6s ease-out; /* Slight zoom effect over 6s */
+    transition: transform 6s ease-out;
+    /* Slight zoom effect over 6s */
 }
+
 .hero-carousel-wrapper .carousel-item.active img {
-    transform: scale(1.05); /* Slight zoom in */
+    transform: scale(1.05);
+    /* Slight zoom in */
 }
 
 /* ===== 3. FILTER UI (DISABLED STATE) ===== */
@@ -727,6 +749,7 @@ footer a:hover {
     pointer-events: none;
     position: relative;
 }
+
 .badge-coming-soon {
     position: absolute;
     top: -5px;
@@ -741,20 +764,24 @@ footer a:hover {
 /* ===== 4. ENHANCED TOAST NOTIFICATION ===== */
 .toast-container .toast {
     border-radius: var(--border-radius-md) !important;
-    overflow: hidden; /* for progress bar */
+    overflow: hidden;
+    /* for progress bar */
     border: 1px solid var(--border-color) !important;
     box-shadow: var(--shadow-md) !important;
     position: relative;
 }
+
 .toast-container .toast.toast-success {
     background-color: var(--secondary-color) !important;
     color: var(--primary-dark) !important;
 }
+
 .toast-container .toast.toast-error {
     background-color: #fdf5f5 !important;
     color: var(--danger-color) !important;
     border-color: #eed6d6 !important;
 }
+
 .toast-progress {
     position: absolute;
     bottom: 0;
@@ -764,9 +791,11 @@ footer a:hover {
     transform-origin: left;
     transition: width linear;
 }
+
 .toast-success .toast-progress {
     background-color: var(--success-color);
 }
+
 .toast-error .toast-progress {
     background-color: var(--danger-color);
 }

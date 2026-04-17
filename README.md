@@ -42,11 +42,11 @@
 | **Chi tiết sản phẩm** | Xem ảnh, mô tả, chọn size (S, M, L, XL), đánh giá |
 | **Giỏ hàng** | Thêm/xóa/cập nhật số lượng sản phẩm theo từng size |
 | **Mã giảm giá (Coupon)** | Áp dụng và xóa mã giảm giá |
-| **Checkout** | Đặt hàng và trừ tồn kho tự động |
+| **Checkout** | Đặt hàng (COD & VNPay) và trừ tồn kho tự động |
 | **Lịch sử đơn hàng** | Xem và theo dõi trạng thái đơn hàng |
 | **Đánh giá sản phẩm** | Viết review (chỉ với sản phẩm đã mua và nhận hàng) |
 | **Hồ sơ cá nhân** | Cập nhật thông tin, đổi mật khẩu, quản lý địa chỉ |
-| **Đăng ký / Đăng nhập** | Form đăng ký tài khoản và xác thực |
+| **Đăng ký / Xác thực** | Đăng ký, Quên mật khẩu với xác thực mã OTP qua Email |
 
 ### ⚙️ Dành cho Admin
 
@@ -125,6 +125,9 @@ Browser / Client
 | **Lombok** | Latest | Giảm boilerplate code |
 | **ModelMapper** | 3.2.0 | Ánh xạ Entity ↔ DTO tự động |
 | **Spring Validation** | 3.x | Validation dữ liệu đầu vào |
+| **Spring Mail** | 3.x | Gửi email và mã OTP tự động |
+| **VNPay API** | Latest | Tích hợp cổng thanh toán trực tuyến |
+| **Spring Actuator** | 3.x | Cung cấp endpoints giám sát, health-check |
 
 ### Database
 | Thư viện | Mục đích |
@@ -171,6 +174,15 @@ Mở file `src/main/resources/application.properties` và chỉnh sửa thông t
 spring.datasource.url=jdbc:mysql://localhost:3306/kids_fashion_db?useSSL=false&serverTimezone=UTC
 spring.datasource.username=your_username
 spring.datasource.password=your_password
+
+# Cấu hình VNPay (Sandbox)
+vnp_TmnCode=your_vnp_tmn_code
+vnp_HashSecret=your_vnp_hash_secret
+vnp_ReturnUrl=http://localhost:8080/vnpay-callback
+
+# Cấu hình Email SMTP (Google App Password)
+spring.mail.username=your_email@gmail.com
+spring.mail.password=your_app_password
 ```
 
 ### Bước 4: Cấu hình thư mục Upload ảnh
@@ -195,6 +207,11 @@ mvn spring-boot:run
 Ứng dụng sẽ khởi động tại: **http://localhost:8080**
 
 > **Lưu ý:** Khi chạy lần đầu, Spring Boot sẽ tự động tạo schema (Hibernate DDL) và dữ liệu mẫu từ `data.sql` được nạp vào database.
+
+### 🌐 Triển khai & Hosting (Cloud/Codespaces)
+
+Để deploy dự án lên môi trường Internet (như Github Codespaces hoặc sử dụng Ngrok), vui lòng tham khảo chi tiết tại tài liệu chuyên sâu đính kèm theo project gốc:
+👉 [**Hướng dẫn Hosting Github Codespaces**](./CODESPACES_HOSTING_GUIDE.md)
 
 ---
 
@@ -253,8 +270,12 @@ kids-fashion-store/
 │   │   │   │   ├── OrderService.java            # Tạo/quản lý đơn hàng
 │   │   │   │   ├── CouponService.java           # Kiểm tra & áp dụng mã giảm giá
 │   │   │   │   ├── ReviewService.java           # Đánh giá sản phẩm
-│   │   │   │   ├── UserService.java             # Quản lý người dùng, xác thực
-│   │   │   │   └── AddressService.java          # Quản lý địa chỉ giao hàng
+│   │   │   │   ├── UserService.java             # Quản lý người dùng, thao tác CRUD
+│   │   │   │   ├── AddressService.java          # Quản lý địa chỉ giao hàng
+│   │   │   │   ├── AuthService.java             # Luồng xác thực đăng nhập/đăng ký
+│   │   │   │   ├── EmailService.java            # Gửi Email thiết lập thông số
+│   │   │   │   ├── OtpService.java              # Tạo và xác thực mã OTP
+│   │   │   │   └── VNPayService.java            # Xử lý request qua API VNPay
 │   │   │   │
 │   │   │   ├── controller/                      # HTTP Controllers (MVC)
 │   │   │   │   ├── ProductController.java       # Trang chủ, danh sách, tìm kiếm
@@ -262,8 +283,9 @@ kids-fashion-store/
 │   │   │   │   ├── OrderController.java         # Checkout, lịch sử đơn hàng
 │   │   │   │   ├── ProfileController.java       # Hồ sơ, mật khẩu, địa chỉ
 │   │   │   │   ├── ReviewController.java        # Gửi đánh giá
-│   │   │   │   ├── RegisterController.java      # Đăng ký tài khoản
 │   │   │   │   ├── CategoryController.java      # Danh mục (public)
+│   │   │   │   ├── AuthController.java          # Đăng ký, đăng nhập OTP, quên mật khẩu
+│   │   │   │   ├── PaymentController.java       # Xử lý callback thanh toán VNPay
 │   │   │   │   ├── AdminController.java         # Toàn bộ admin panel
 │   │   │   │   ├── AdminReviewController.java   # Admin: duyệt review
 │   │   │   │   └── LogoutController.java        # Xử lý đăng xuất
@@ -302,6 +324,8 @@ kids-fashion-store/
 │   └── test/                                    # Unit tests
 │
 ├── uploads/                                     # Thư mục lưu ảnh upload (runtime)
+├── logs/                                        # Lưu trữ file log từ cấu hình log-rotation (runtime)
+├── CODESPACES_HOSTING_GUIDE.md                  # Hướng dẫn deploy lên môi trường internet
 ├── pom.xml                                      # Maven dependencies
 ├── mvnw / mvnw.cmd                              # Maven Wrapper
 └── README.md
@@ -400,8 +424,10 @@ PENDING → PROCESSING → SHIPPED → DELIVERED
 | `GET` | `/product/{id}` | Chi tiết sản phẩm |
 | `GET` | `/category/{slug}` | Sản phẩm theo danh mục |
 | `GET` | `/search?keyword=...` | Tìm kiếm sản phẩm |
-| `GET` | `/register` | Form đăng ký |
-| `POST` | `/register` | Xử lý đăng ký |
+| `GET` | `/register` | Form đăng ký tài khoản mới |
+| `POST` | `/register` | Xử lý thông tin đăng ký cơ bản |
+| `POST` | `/auth/send-otp` | Gửi mã OTP xác thực (Đăng ký/Quên MK) |
+| `POST` | `/auth/verify-otp` | Xác thực OTP & Kích hoạt/Lấy mật khẩu |
 | `POST` | `/cart/add` | Thêm vào giỏ hàng (AJAX) |
 | `GET` | `/cart/summary` | Lấy tổng quan giỏ hàng (AJAX) |
 
@@ -414,8 +440,9 @@ PENDING → PROCESSING → SHIPPED → DELIVERED
 | `POST` | `/cart/remove` | Xóa sản phẩm khỏi giỏ (AJAX) |
 | `POST` | `/cart/apply-coupon` | Áp dụng mã giảm giá (AJAX) |
 | `POST` | `/cart/remove-coupon` | Xóa mã giảm giá (AJAX) |
-| `GET` | `/checkout` | Trang thanh toán |
+| `GET` | `/checkout` | Trang thanh toán (Hỗ trợ COD & VNPay) |
 | `POST` | `/checkout/place-order` | Đặt hàng |
+| `GET` | `/vnpay-callback` | Xử lý kết quả trả về từ Cổng VNPay |
 | `GET` | `/orders` | Danh sách đơn hàng |
 | `GET` | `/order/{id}` | Chi tiết đơn hàng |
 | `GET` | `/profile` | Hồ sơ cá nhân |
@@ -509,6 +536,20 @@ File `data.sql` cung cấp dữ liệu khởi tạo bao gồm:
 - Mỗi người dùng chỉ review một lần trên mỗi sản phẩm
 - Review tự động được duyệt (APPROVED) khi gửi
 - Admin có thể duyệt/từ chối/xóa review
+
+### 💳 Tích hợp Thanh toán VNPay
+- Khách hàng có thể lựa chọn thanh toán trực tuyến qua cổng thẻ nội địa/quốc tế VNPay.
+- Phương thức mã hóa chuẩn bảo mật an toàn cao nhất (`HMAC-SHA512`).
+- Tự động nhận diện thanh toán thành công/thất bại qua hệ thống `callback` và tự động cập nhật trạng thái đơn hàng.
+
+### ✉️ Bảo mật Xác thực Email & OTP
+- Sử dụng **Google SMTP** để gửi các mã OTP (One-Time Password) qua Email khách hàng.
+- Ràng buộc quy trình xác thực sau khi đăng ký tài khoản để lọc Email spam ảo, chỉ tài khoản verify mới được active.
+- Hỗ trợ luồng **Quên mật khẩu** tự động với xác nhận OTP tiện lợi thay vì liên hệ admin.
+
+### 📊 Giám sát & Logging Hệ Thống
+- Sử dụng **Spring Boot Actuator** với khả năng Health-check hệ thống một cách chi tiết (`/actuator/health`).
+- Hệ thống Ghi log ra file (`log-rotation`) lưu trữ đầy đủ mọi hoạt động, bug ở Back-End vào mục thư mục độc lập `logs/application.log`, giúp kỹ sư dễ dàng kiểm tra lịch sử theo mức độ ưu tiên.
 
 ---
 

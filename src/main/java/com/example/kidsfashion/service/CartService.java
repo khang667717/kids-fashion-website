@@ -186,7 +186,10 @@ public class CartService {
     }
 
     public int getCartSize(HttpSession session) {
-        return getCart(session).size();
+        // Trả về tổng quantity của tất cả item (Shopee style), thay vì số mẫu mã (List.size())
+        return getCart(session).stream()
+                .mapToInt(CartItem::getQuantity)
+                .sum();
     }
 
     public void applyCoupon(HttpSession session, String couponCode) {

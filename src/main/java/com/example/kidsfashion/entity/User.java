@@ -40,6 +40,27 @@ public class User {
     @Column(nullable = false)
     private String role; // e.g., "ROLE_ADMIN", "ROLE_CUSTOMER"
 
+    // ===== Email OTP Verification =====
+    /** true nếu email đã xác thực hoặc là admin. false = chưa xác thực. */
+    @Column(nullable = false, columnDefinition = "BOOLEAN DEFAULT FALSE")
+    private boolean enabled = false;
+
+    /** Hash (SHA-256) của OTP 6 số. null sau khi xác thực thành công. */
+    @Column(name = "otp_code")
+    private String otp;
+
+    /** Thời điểm OTP hết hạn (5 phút từ lúc tạo). */
+    @Column(name = "otp_expiry")
+    private LocalDateTime otpExpiry;
+
+    /** Số lần nhập sai OTP. Reset về 0 sau mỗi lần resend hoặc xác thực thành công. */
+    @Column(name = "otp_attempt", nullable = false, columnDefinition = "INT DEFAULT 0")
+    private int otpAttempt = 0;
+
+    /** Thời điểm gửi OTP gần nhất – dùng để rate-limit resend (30s). */
+    @Column(name = "last_otp_sent_time")
+    private LocalDateTime lastOtpSentTime;
+
     // ===== Profile fields =====
     @Column(name = "full_name")
     private String fullName;

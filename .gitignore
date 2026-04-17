@@ -93,7 +93,7 @@ CODESPACES_HOSTING_GUIDE.md
 # File HTML đã download (vi phạm bản quyền)
 uploads/*.html
 uploads/*_files/
-
+uploads/
 # Ảnh không rõ nguồn gốc (tùy chọn - nếu muốn giữ thì bỏ # ở dòng dưới)
 # uploads/*.webp
 # uploads/*.jpg

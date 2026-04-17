@@ -2,6 +2,7 @@ package com.example.kidsfashion.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -14,6 +15,8 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 
 @Configuration
 @EnableWebSecurity
@@ -33,7 +36,8 @@ public class SecurityConfig {
                                 "/cart/update",
                                 "/cart/remove",
                                 "/cart/apply-coupon",
-                                "/cart/remove-coupon"
+                                "/cart/remove-coupon",
+                                "/resend-otp"  // AJAX resend không gửi CSRF token
                         )
                 )
                 .authorizeHttpRequests(authz -> authz
@@ -41,7 +45,7 @@ public class SecurityConfig {
                                 "/products/**", "/product/**", "/categories/**", "/search",
                                 "/css/**", "/js/**", "/images/**", "/webjars/**", "/uploads/**").permitAll()
                         .requestMatchers("/api/**").permitAll()
-                        .requestMatchers("/register").permitAll()
+                        .requestMatchers("/register", "/verify-otp", "/resend-otp").permitAll()
                         .requestMatchers("/logout-success").permitAll()
                         .requestMatchers("/cart/add", "/cart/api/**", "/cart/update",
                                 "/cart/remove", "/cart/apply-coupon",
@@ -59,7 +63,7 @@ public class SecurityConfig {
                         .permitAll()
                 )
                 .logout(logout -> logout
-                        .logoutUrl("/logout")  // ✅ Thay logoutRequestMatcher bằng logoutUrl
+                        .logoutUrl("/logout")
                         .logoutSuccessUrl("/logout-success")
                         .invalidateHttpSession(true)
                         .deleteCookies("JSESSIONID")
@@ -79,16 +83,36 @@ public class SecurityConfig {
                                                 org.springframework.security.core.AuthenticationException exception)
                     throws IOException, ServletException {
 
-                String errorMessage = "Invalid username or password";
+                // Kiểm tra nếu là tài khoản chưa xác thực email
+                if (exception instanceof DisabledException) {
+                    String requestedWith = request.getHeader("X-Requested-With");
+                    String email = request.getParameter("username"); // username = email
 
-                // Kiểm tra nếu là AJAX request
+                    if ("XMLHttpRequest".equals(requestedWith)) {
+                        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                        response.setContentType("application/json;charset=UTF-8");
+                        response.getWriter().write(
+                            "{\"success\":false,\"message\":\"" + exception.getMessage() + "\"," +
+                            "\"requireOtp\":true,\"email\":\"" + (email != null ? email : "") + "\"}"
+                        );
+                    } else {
+                        String encodedEmail = email != null ?
+                            URLEncoder.encode(email, StandardCharsets.UTF_8) : "";
+                        response.sendRedirect("/verify-otp?email=" + encodedEmail +
+                            "&msg=unverified");
+                    }
+                    return;
+                }
+
+                // Lỗi username/password thông thường
+                String errorMessage = "Sai tên đăng nhập hoặc mật khẩu";
                 String requestedWith = request.getHeader("X-Requested-With");
+
                 if ("XMLHttpRequest".equals(requestedWith)) {
                     response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                     response.setContentType("application/json;charset=UTF-8");
                     response.getWriter().write("{\"success\":false,\"message\":\"" + errorMessage + "\"}");
                 } else {
-                    // Request thường - redirect về trang chủ với parameter error
                     response.sendRedirect("/?error=true");
                 }
             }

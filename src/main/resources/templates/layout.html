@@ -28,7 +28,9 @@
 
         <!-- Minimal overrides for Admin to keep it clean -->
         <style th:if="${view != null and view.startsWith('admin-')}">
-            .content-wrapper { background-color: #f8f9fa; }
+            .content-wrapper {
+                background-color: #f8f9fa;
+            }
         </style>
     </head>
 
@@ -182,8 +184,11 @@
 
                             <!-- Expandable Magic Search Form -->
                             <form class="expandable-search-wrapper me-3" action="/search" method="get">
-                                <input class="form-control expandable-search-input rounded-pill shadow-none" type="search" name="keyword" placeholder="Tìm kiếm sản phẩm..." aria-label="Tìm kiếm" autocomplete="off" id="magicSearchInput">
-                                <button class="btn expandable-search-btn rounded-circle text-muted" type="button" title="Search" id="magicSearchBtn">
+                                <input class="form-control expandable-search-input rounded-pill shadow-none"
+                                    type="search" name="keyword" placeholder="Tìm kiếm sản phẩm..."
+                                    aria-label="Tìm kiếm" autocomplete="off" id="magicSearchInput">
+                                <button class="btn expandable-search-btn rounded-circle text-muted" type="button"
+                                    title="Search" id="magicSearchBtn">
                                     <i class="fas fa-search"></i>
                                 </button>
                             </form>
@@ -193,20 +198,24 @@
                                 <!-- Cart -->
                                 <li class="nav-item" th:classappend="${view == 'cart'} ? 'active'">
                                     <!-- Đã đăng nhập: vào thẳng cart -->
-                                    <a class="nav-link position-relative" href="/cart"
+                                    <a class="nav-link" href="/cart"
                                         sec:authorize="isAuthenticated()">
-                                        <i class="fas fa-shopping-cart"></i> Giỏ hàng
-                                        <span
-                                            class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
-                                            id="cartCount">0</span>
+                                        <span class="position-relative d-inline-block me-1">
+                                            <i class="fas fa-shopping-cart fa-lg"></i>
+                                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+                                                  id="cartCount" style="font-size: 0.75rem; padding: 0.35em 0.55em; border: 2px solid white;">0</span>
+                                        </span>
+                                        Giỏ hàng
                                     </a>
                                     <!-- Chưa đăng nhập: mở modal login -->
-                                    <a class="nav-link position-relative" href="#" sec:authorize="isAnonymous()"
+                                    <a class="nav-link" href="#" sec:authorize="isAnonymous()"
                                         data-bs-toggle="modal" data-bs-target="#loginModal" id="cartNavLinkAnon">
-                                        <i class="fas fa-shopping-cart"></i> Giỏ hàng
-                                        <span
-                                            class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
-                                            id="cartCount">0</span>
+                                        <span class="position-relative d-inline-block me-1">
+                                            <i class="fas fa-shopping-cart fa-lg"></i>
+                                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+                                                  id="cartCount" style="font-size: 0.75rem; padding: 0.35em 0.55em; border: 2px solid white;">0</span>
+                                        </span>
+                                        Giỏ hàng
                                     </a>
                                 </li>
 
@@ -227,7 +236,12 @@
                                     <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                         data-bs-toggle="dropdown">
                                         <i class="fas fa-user-circle"></i>
-                                        <span sec:authentication="name">User</span>
+                                        <!-- JS sẽ cắt bỏ @domain nếu username là email -->
+                                        <span id="navUsername"
+                                              sec:authentication="name"
+                                              style="max-width:120px; overflow:hidden; text-overflow:ellipsis;
+                                                     white-space:nowrap; display:inline-block;
+                                                     vertical-align:middle;">User</span>
                                     </a>
                                     <ul class="dropdown-menu dropdown-menu-end">
                                         <li><a class="dropdown-item" href="/profile"><i
@@ -255,7 +269,11 @@
                                     <a class="nav-link dropdown-toggle text-danger fw-bold" href="#" id="adminDropdown"
                                         role="button" data-bs-toggle="dropdown">
                                         <i class="fas fa-crown me-1"></i>
-                                        <span sec:authentication="name">Admin</span>
+                                        <span id="navAdminName"
+                                              sec:authentication="name"
+                                              style="max-width:100px; overflow:hidden; text-overflow:ellipsis;
+                                                     white-space:nowrap; display:inline-block;
+                                                     vertical-align:middle;">Admin</span>
                                     </a>
                                     <ul class="dropdown-menu dropdown-menu-end">
                                         <li><a class="dropdown-item" href="/admin/dashboard"><i
@@ -323,18 +341,25 @@
                     <div class="row g-4 mb-4">
                         <div class="col-lg-3 col-md-6">
                             <h6 class="text-uppercase fw-bold mb-3" style="letter-spacing: 0.1em;">Kids Fashion</h6>
-                            <p class="text-muted small">Thời trang trẻ em cao cấp. Mang đến phong cách đơn giản, thoải mái và an toàn cho bé qua từng chất liệu.</p>
+                            <p class="text-muted small">Thời trang trẻ em cao cấp. Mang đến phong cách đơn giản, thoải
+                                mái và an toàn cho bé qua từng chất liệu.</p>
                         </div>
                         <div class="col-lg-2 col-md-6">
-                            <h6 class="text-uppercase fw-bold mb-3" style="letter-spacing: 0.05em; font-size: 0.85rem;">Phục Vụ</h6>
+                            <h6 class="text-uppercase fw-bold mb-3" style="letter-spacing: 0.05em; font-size: 0.85rem;">
+                                Phục Vụ</h6>
                             <ul class="list-unstyled small text-muted">
-                                <li class="mb-2"><a href="javascript:void(0)" class="text-muted text-decoration-none hover-dark">Vận chuyển & Giao nhận</a></li>
-                                <li class="mb-2"><a href="javascript:void(0)" class="text-muted text-decoration-none hover-dark">Chính sách đổi trả</a></li>
-                                <li class="mb-2"><a href="javascript:void(0)" class="text-muted text-decoration-none hover-dark">Hướng dẫn chọn size</a></li>
+                                <li class="mb-2"><a href="javascript:void(0)"
+                                        class="text-muted text-decoration-none hover-dark">Vận chuyển & Giao nhận</a>
+                                </li>
+                                <li class="mb-2"><a href="javascript:void(0)"
+                                        class="text-muted text-decoration-none hover-dark">Chính sách đổi trả</a></li>
+                                <li class="mb-2"><a href="javascript:void(0)"
+                                        class="text-muted text-decoration-none hover-dark">Hướng dẫn chọn size</a></li>
                             </ul>
                         </div>
                         <div class="col-lg-2 col-md-6">
-                            <h6 class="text-uppercase fw-bold mb-3" style="letter-spacing: 0.05em; font-size: 0.85rem;">Liên Hệ</h6>
+                            <h6 class="text-uppercase fw-bold mb-3" style="letter-spacing: 0.05em; font-size: 0.85rem;">
+                                Liên Hệ</h6>
                             <ul class="list-unstyled small text-muted">
                                 <li class="mb-2">123 Đường Số 1, Quận 1, TP.HCM</li>
                                 <li class="mb-2">1900 1234 (8:00 - 22:00)</li>
@@ -342,11 +367,14 @@
                             </ul>
                         </div>
                         <div class="col-lg-5 col-md-6 text-md-end">
-                            <h6 class="text-uppercase fw-bold mb-3" style="letter-spacing: 0.05em; font-size: 0.85rem;">Đăng Ký Nhận Bản Tin</h6>
+                            <h6 class="text-uppercase fw-bold mb-3" style="letter-spacing: 0.05em; font-size: 0.85rem;">
+                                Đăng Ký Nhận Bản Tin</h6>
                             <form class="newsletter-form" id="newsletterForm">
                                 <div class="input-group mb-2" style="max-width: 400px; margin-left: auto;">
-                                    <input type="email" class="form-control text-dark border-secondary rounded-0" placeholder="Địa chỉ email" required style="font-size: 0.85rem;">
-                                    <button class="btn btn-dark rounded-0" type="submit" style="letter-spacing: 0.05em;">ĐĂNG KÝ</button>
+                                    <input type="email" class="form-control text-dark border-secondary rounded-0"
+                                        placeholder="Địa chỉ email" required style="font-size: 0.85rem;">
+                                    <button class="btn btn-dark rounded-0" type="submit"
+                                        style="letter-spacing: 0.05em;">ĐĂNG KÝ</button>
                                 </div>
                             </form>
                         </div>
@@ -354,7 +382,8 @@
                 </div>
                 <div class="border-top py-3">
                     <div class="container d-flex flex-column flex-md-row justify-content-between align-items-center">
-                        <span class="text-muted small">© 2025 Kids Fashion. Bản quyền thuộc về Kids Fashion Vietnam.</span>
+                        <span class="text-muted small">© 2025 Kids Fashion. Bản quyền thuộc về Kids Fashion
+                            Vietnam.</span>
                         <div class="mt-3 mt-md-0">
                             <i class="fab fa-cc-visa fa-lg me-2 text-muted"></i>
                             <i class="fab fa-cc-mastercard fa-lg text-muted"></i>
@@ -380,29 +409,37 @@
                             <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"
                                 id="csrfToken" />
 
-                            <!-- Username field -->
+                            <!-- Email / Username field -->
                             <div class="mb-3">
-                                <label for="username" class="form-label">Tên đăng nhập</label>
+                                <label for="username" class="form-label">
+                                    <i class="fas fa-user me-1 text-primary"></i>Email / Tên đăng nhập
+                                </label>
                                 <input type="text" class="form-control" id="username" name="username"
-                                    placeholder="Nhập tên đăng nhập" required>
+                                    placeholder="Email hoặc tên đăng nhập" required autocomplete="username">
+                                <div class="form-text text-muted" style="font-size:0.8rem;">
+                                    <i class="fas fa-info-circle me-1"></i>
+                                    Đăng ký mới? Dùng <strong>email</strong> của bạn để đăng nhập.
+                                </div>
                             </div>
 
                             <!-- Password field -->
                             <div class="mb-3">
-                                <label for="password" class="form-label">Mật khẩu</label>
+                                <label for="password" class="form-label">
+                                    <i class="fas fa-lock me-1 text-primary"></i>Mật khẩu
+                                </label>
                                 <input type="password" class="form-control" id="password" name="password"
-                                    placeholder="Nhập mật khẩu" required>
+                                    placeholder="Nhập mật khẩu" required autocomplete="current-password">
                             </div>
 
                             <button type="submit" class="btn btn-primary w-100" id="loginSubmitBtn">
-                                <span id="loginBtnText">Đăng nhập</span>
+                                <span id="loginBtnText"><i class="fas fa-sign-in-alt me-2"></i>Đăng nhập</span>
                                 <span id="loginSpinner" class="spinner-border spinner-border-sm d-none"
                                     role="status"></span>
                             </button>
                         </form>
 
-                        <p class="mt-3 text-center">
-                            Chưa có tài khoản? <a href="/register">Đăng ký ngay</a>
+                        <p class="mt-3 text-center small text-muted">
+                            Chưa có tài khoản? <a href="/register" class="fw-semibold">Đăng ký ngay</a>
                         </p>
                     </div>
                 </div>
@@ -415,6 +452,23 @@
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
         <script th:src="@{/js/main.js}"></script>
+
+        <!-- Cắt @domain khỏi username trên navbar (nếu username là email) -->
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                // Xử lý span hiển thị tên user thường và admin
+                ['navUsername', 'navAdminName'].forEach(function (id) {
+                    var el = document.getElementById(id);
+                    if (!el) return;
+                    var text = el.textContent || el.innerText || '';
+                    var atIdx = text.indexOf('@');
+                    if (atIdx > 0) {
+                        // Chỉ hiển thị phần trước @ (vd: "leduykhang25012005")
+                        el.textContent = text.substring(0, atIdx);
+                    }
+                });
+            });
+        </script>
 
         <!-- Script cho nút 3 gạch ngang với tốc độ vừa phải (chỉ admin) -->
         <script th:if="${view != null and view.startsWith('admin-')}">
@@ -682,7 +736,7 @@
                 // === XỬ LÝ REGISTRATION SUCCESS ===
                 const successAlert = document.querySelector('.alert-success');
                 if (successAlert && successAlert.innerText.includes('Registration successful')) {
-                    console.log('✅ Registration successful - opening login modal');
+                    console.log('Registration successful - opening login modal');
 
                     setTimeout(function () {
                         const loginModalElement = document.getElementById('loginModal');
@@ -800,13 +854,24 @@
                             if (response.status === 401) {
                                 // Login thất bại
                                 let errorMsg = 'Sai tên đăng nhập hoặc mật khẩu';
+                                let requireOtp = false;
+                                let otpEmail = '';
 
                                 if (contentType && contentType.includes('application/json')) {
                                     const data = await response.json();
                                     errorMsg = data.message || errorMsg;
+                                    requireOtp = data.requireOtp || false;
+                                    otpEmail = data.email || '';
                                 }
 
-                                // Hiển thị lỗi
+                                // Nếu tài khoản chưa xác thực email → redirect sang OTP page
+                                if (requireOtp && otpEmail) {
+                                    window.location.href = '/verify-otp?email=' +
+                                        encodeURIComponent(otpEmail) + '&msg=unverified';
+                                    return;
+                                }
+
+                                // Hiển thị lỗi thông thường
                                 showLoginError(errorMsg);
                                 usernameField.classList.add('is-invalid');
                                 passwordField.classList.add('is-invalid');

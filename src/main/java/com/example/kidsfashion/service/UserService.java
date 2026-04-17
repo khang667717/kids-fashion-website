@@ -3,6 +3,8 @@ package com.example.kidsfashion.service;
 import com.example.kidsfashion.entity.User;
 import com.example.kidsfashion.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -11,6 +13,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class UserService implements UserDetailsService {
@@ -18,17 +21,27 @@ public class UserService implements UserDetailsService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
+    /**
+     * Nạp UserDetails theo username (= email với user thường).
+     * - Admin: luôn được đăng nhập bình thường.
+     * - ROLE_CUSTOMER: nếu enabled=false → ném DisabledException.
+     */
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        System.out.println("========== LOGIN ATTEMPT ==========");
-        System.out.println("Username: " + username);
+        log.info("[UserService] Login attempt for: {}", username);
 
         User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
+                .orElseThrow(() -> new UsernameNotFoundException("Không tìm thấy tài khoản: " + username));
 
-        System.out.println("User found: " + user.getUsername());
-        System.out.println("Password hash in DB: " + user.getPassword());
+        // Chỉ kiểm tra enabled cho ROLE_CUSTOMER (admin không cần verify OTP)
+        if ("ROLE_CUSTOMER".equals(user.getRole()) && !user.isEnabled()) {
+            log.warn("[UserService] Disabled account login attempt: {}", username);
+            throw new DisabledException(
+                    "Tài khoản chưa được xác thực email. Vui lòng kiểm tra email " +
+                    user.getEmail() + " và nhập mã OTP.");
+        }
 
+        log.info("[UserService] User authenticated: {}", username);
         return org.springframework.security.core.userdetails.User.builder()
                 .username(user.getUsername())
                 .password(user.getPassword())

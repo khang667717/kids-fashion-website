@@ -29,12 +29,18 @@ INSERT IGNORE INTO products (id, name, description, price, stock, image_url, cat
 (19, 'Light Jacket', 'Lightweight spring jacket', 38.99, 30, '/images/product19.jpg', 4),
 (20, 'Sandals', 'Summer sandals', 16.99, 80, '/images/product20.jpg', 5);
 
--- Insert users (password is 'password' encoded with BCrypt)
-INSERT IGNORE INTO users (id, username, password, email, role) VALUES
-(1, 'admin', '$2a$10$dXJ3SW6G7P50lGmMkkmwe.20cQQubK3.HZWzG3YB1tlRy.fqvM/BG', 'admin@kidsfashion.com', 'ROLE_ADMIN'),
-(2, 'john', '$2a$10$dXJ3SW6G7P50lGmMkkmwe.20cQQubK3.HZWzG3YB1tlRy.fqvM/BG', 'john@example.com', 'ROLE_CUSTOMER'),
-(3, 'jane', '$2a$10$dXJ3SW6G7P50lGmMkkmwe.20cQQubK3.HZWzG3YB1tlRy.fqvM/BG', 'jane@example.com', 'ROLE_CUSTOMER'),
-(4, 'bob', '$2a$10$dXJ3SW6G7P50lGmMkkmwe.20cQQubK3.HZWzG3YB1tlRy.fqvM/BG', 'bob@example.com', 'ROLE_CUSTOMER');
+-- Insert users (password là 'password' encode BCrypt)
+-- enabled=TRUE: admin và sample customers đã xác thực sẵn
+INSERT IGNORE INTO users (id, username, password, email, role, enabled) VALUES
+(1, 'admin', '$2a$10$dXJ3SW6G7P50lGmMkkmwe.20cQQubK3.HZWzG3YB1tlRy.fqvM/BG', 'admin@kidsfashion.com', 'ROLE_ADMIN', TRUE),
+(2, 'john', '$2a$10$dXJ3SW6G7P50lGmMkkmwe.20cQQubK3.HZWzG3YB1tlRy.fqvM/BG', 'john@example.com', 'ROLE_CUSTOMER', TRUE),
+(3, 'jane', '$2a$10$dXJ3SW6G7P50lGmMkkmwe.20cQQubK3.HZWzG3YB1tlRy.fqvM/BG', 'jane@example.com', 'ROLE_CUSTOMER', TRUE),
+(4, 'bob', '$2a$10$dXJ3SW6G7P50lGmMkkmwe.20cQQubK3.HZWzG3YB1tlRy.fqvM/BG', 'bob@example.com', 'ROLE_CUSTOMER', TRUE);
+
+-- FIX: Đảm bảo admin và sample users hiện có trong DB đều enabled=true
+-- (phòng trường hợp đã có dữ liệu cũ với enabled=false)
+UPDATE users SET enabled = TRUE WHERE role = 'ROLE_ADMIN';
+UPDATE users SET enabled = TRUE WHERE username IN ('john', 'jane', 'bob');
 
 -- Insert coupons
 INSERT IGNORE INTO coupons (id, code, discount_percent, start_date, end_date) VALUES

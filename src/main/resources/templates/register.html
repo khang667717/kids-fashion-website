@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org"
+<html lang="vi" xmlns:th="http://www.thymeleaf.org"
       th:replace="~{layout :: layout(view='register')}">
 <head>
     <title>Đăng ký - Kids Fashion</title>
@@ -7,57 +7,127 @@
 <body>
 <th:block th:fragment="content">
     <div class="row justify-content-center">
-        <div class="col-md-6">
-            <h2 class="text-center mb-4">Tạo tài khoản mới</h2>
+        <div class="col-md-5 col-lg-4">
+            <div class="text-center mb-4">
+                <h2 class="fw-bold">Tạo tài khoản</h2>
+                <p class="text-muted small">Đăng ký để mua sắm và theo dõi đơn hàng</p>
+            </div>
 
-            <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+            <!-- Flash messages -->
+            <div th:if="${error}" class="alert alert-danger d-flex align-items-center gap-2" role="alert">
+                <i class="fas fa-exclamation-circle"></i>
+                <span th:text="${error}"></span>
+            </div>
+            <div th:if="${success}" class="alert alert-success d-flex align-items-center gap-2" role="alert">
+                <i class="fas fa-check-circle"></i>
+                <span th:text="${success}"></span>
+            </div>
 
-            <form method="post" th:action="@{/register}">
+            <form method="post" th:action="@{/register}" id="registerForm" novalidate>
                 <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
 
+                <!-- Email -->
                 <div class="mb-3">
-                    <label for="username" class="form-label">Tên đăng nhập *</label>
-                    <input type="text" class="form-control" id="username" name="username" required
-                           pattern="[a-zA-Z0-9]{3,20}" title="Username must be 3-20 characters (letters and numbers only)">
+                    <label for="email" class="form-label fw-semibold">
+                        <i class="fas fa-envelope me-1 text-primary"></i>Địa chỉ Email *
+                    </label>
+                    <input type="email" class="form-control form-control-lg" id="email" name="email"
+                           placeholder="example@gmail.com" required autocomplete="email">
+                    <div class="form-text">Mã xác thực OTP sẽ được gửi tới email này.</div>
                 </div>
 
+                <!-- Password -->
                 <div class="mb-3">
-                    <label for="email" class="form-label">Email *</label>
-                    <input type="email" class="form-control" id="email" name="email" required>
+                    <label for="password" class="form-label fw-semibold">
+                        <i class="fas fa-lock me-1 text-primary"></i>Mật khẩu *
+                    </label>
+                    <div class="input-group">
+                        <input type="password" class="form-control form-control-lg" id="password"
+                               name="password" required minlength="8"
+                               placeholder="Tối thiểu 8 ký tự">
+                        <button class="btn btn-outline-secondary" type="button" id="togglePwd"
+                                title="Hiện/ẩn mật khẩu">
+                            <i class="fas fa-eye" id="eyeIcon"></i>
+                        </button>
+                    </div>
                 </div>
 
-                <div class="mb-3">
-                    <label for="password" class="form-label">Mật khẩu *</label>
-                    <input type="password" class="form-control" id="password" name="password" required minlength="6">
-                    <div class="form-text">Mật khẩu phải có ít nhất 6 ký tự</div>
+                <!-- Confirm Password -->
+                <div class="mb-4">
+                    <label for="confirmPassword" class="form-label fw-semibold">
+                        <i class="fas fa-lock me-1 text-primary"></i>Xác nhận mật khẩu *
+                    </label>
+                    <input type="password" class="form-control form-control-lg" id="confirmPassword"
+                           name="confirmPassword" required placeholder="Nhập lại mật khẩu">
+                    <div id="pwdMatchMsg" class="form-text"></div>
                 </div>
 
-                <div class="mb-3">
-                    <label for="confirmPassword" class="form-label">Xác nhận mật khẩu *</label>
-                    <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" required>
-                </div>
-
-                <button type="submit" class="btn btn-primary w-100">Đăng ký</button>
+                <button type="submit" class="btn btn-primary btn-lg w-100" id="submitBtn">
+                    <span id="submitText"><i class="fas fa-user-plus me-2"></i>Đăng ký & Nhận OTP</span>
+                    <span id="submitSpinner" class="spinner-border spinner-border-sm d-none" role="status"></span>
+                </button>
             </form>
 
-            <p class="mt-3 text-center">
+            <p class="mt-3 text-center text-muted small">
                 Đã có tài khoản?
-                <!-- Sửa thành nút mở modal thay vì link -->
-                <a href="#" data-bs-toggle="modal" data-bs-target="#loginModal">Đăng nhập tại đây</a>
-            </p>
+                <a href="#" data-bs-toggle="modal" data-bs-target="#loginModal" class="fw-semibold">Đăng nhập tại đây</a>
             </p>
         </div>
     </div>
 
     <script>
-        document.querySelector('form').addEventListener('submit', function(e) {
-            const password = document.getElementById('password').value;
-            const confirm = document.getElementById('confirmPassword').value;
+        document.addEventListener('DOMContentLoaded', function () {
+            const form = document.getElementById('registerForm');
+            const password = document.getElementById('password');
+            const confirm = document.getElementById('confirmPassword');
+            const matchMsg = document.getElementById('pwdMatchMsg');
+            const toggleBtn = document.getElementById('togglePwd');
+            const eyeIcon = document.getElementById('eyeIcon');
+            const submitBtn = document.getElementById('submitBtn');
+            const submitText = document.getElementById('submitText');
+            const submitSpinner = document.getElementById('submitSpinner');
 
-            if (password !== confirm) {
-                e.preventDefault();
-                alert('Mật khẩu không khớp!');
-            }
+            // Hiện/ẩn mật khẩu
+            toggleBtn.addEventListener('click', function () {
+                const type = password.type === 'password' ? 'text' : 'password';
+                password.type = type;
+                eyeIcon.className = type === 'text' ? 'fas fa-eye-slash' : 'fas fa-eye';
+            });
+
+            // Realtime kiểm tra khớp mật khẩu
+            confirm.addEventListener('input', function () {
+                if (this.value === '') {
+                    matchMsg.textContent = '';
+                    confirm.classList.remove('is-valid', 'is-invalid');
+                } else if (this.value === password.value) {
+                    matchMsg.innerHTML = '<span class="text-success"><i class="fas fa-check me-1"></i>Mật khẩu khớp</span>';
+                    confirm.classList.add('is-valid');
+                    confirm.classList.remove('is-invalid');
+                } else {
+                    matchMsg.innerHTML = '<span class="text-danger"><i class="fas fa-times me-1"></i>Mật khẩu không khớp</span>';
+                    confirm.classList.add('is-invalid');
+                    confirm.classList.remove('is-valid');
+                }
+            });
+
+            // Submit validation
+            form.addEventListener('submit', function (e) {
+                if (password.value !== confirm.value) {
+                    e.preventDefault();
+                    confirm.classList.add('is-invalid');
+                    matchMsg.innerHTML = '<span class="text-danger">Mật khẩu không khớp!</span>';
+                    return;
+                }
+                if (password.value.length < 8) {
+                    e.preventDefault();
+                    password.classList.add('is-invalid');
+                    return;
+                }
+                // Hiện spinner
+                submitText.classList.add('d-none');
+                submitSpinner.classList.remove('d-none');
+                submitBtn.disabled = true;
+            });
         });
     </script>
 </th:block>
